@@ -4,7 +4,7 @@
     <img id="coverImg" alt="chagall cover" :src="require('@/assets/cover_frame.png')" width="225" height="295">
       <br> 
         <br>
-          <button id="startbutton" type="button" @click="$router.push('/game')">Start Game</button>
+          <button id="startbutton"  @click="$router.push('/game')">Start Game</button>
             <footer>
               <br>
                 <p id="footer"> 
@@ -69,7 +69,7 @@ export default {
   color: black;
   background-color: #eeba2b;
   border: #eeba2b;
-  font-family: Verdana;
+  font-family: Tahoma;
   font-weight: bold;
   font-size: 20px;
   width: 160px;
