@@ -1,6 +1,14 @@
 <!-- HTML -->
 <template>
     <div class="gamescreen">
+      <div id="circle">
+        <span 
+        class="circle" 
+        v-for="index in 5" 
+          :key="index"
+          :class="{ filled: filledCircles >= index }"
+         ></span>
+      </div>
       <div id="guessingbox">
         <p id="guesstitle">GUESS</p>
         <div id="container">
@@ -13,23 +21,53 @@
       </div>
        <br>
        <br>
-     <button id="confirms">Confirm</button>
+       <button id="confirms" @click="fillCircle">Confirm</button>
     </div>
 </template>
   
   <!-- JS -->
   <script>
+  
   export default {
-    name: 'GameScreen',
-    props: {
-      msg: String
+  name: 'GameScreen',
+  props: {
+    msg: String
+  },
+  
+  data() {
+    return {
+      filledCircles: 0
+    }
+  },
+  methods: {
+    fillCircle() {
+      if (this.filledCircles < 5) {
+        this.filledCircles++;
+      }
     }
   }
+}
   </script>
   
   <!-- Add "scoped" attribute to limit CSS to this component only -->
   <!-- CSS -->
   <style scoped>
+  .circle {
+    margin-left: 8px;
+    height: 25px;
+    width: 25px;
+    border:1px solid #F5F5F5;
+    background-color:#F5F5F5;
+    border-radius: 50%;
+    display: inline-block;
+  }
+
+  .filled{
+    background-color:orange; 
+  }
+
+
+
   #guesstitle{
     font-family:tahoma;
     margin-bottom:5px;
