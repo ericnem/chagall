@@ -1,4 +1,5 @@
 import axios from 'axios'
+import Round from './round.js';
 
 // fetchArt() returns data about a random painting as an array:
 // {imgUrl, title, dateEnd, dateStart, artist}
@@ -23,6 +24,7 @@ export function fetchArt() {
     }
   }).then(response => {
     var imgUrl = ""
+    
     try {
       imgUrl = response.data.records[recordIndex].images[0].baseimageurl + "?height=500&width=500";
     } catch (error) {
@@ -47,8 +49,8 @@ export function fetchArt() {
     }
     
     // const artData = [imgUrl, title, dateEnd, dateStart, artist];
-    const artData = [imgUrl, title, dateEnd, dateStart, artist];
-    return artData;
+    let round = new Round(imgUrl, title, dateStart, dateEnd, artist);
+    return round;
   })
   .catch(error => {
     console.log(error);
