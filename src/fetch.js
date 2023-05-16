@@ -17,9 +17,9 @@ export function fetchArt() {
 
   return axios.get(apiUrl, {
     params: {
+      hasimage:1,
       apikey: apiKey,
       classification: "Paintings",
-      hasimage: 1,
       page: pageNum
     }
   }).then(response => {

@@ -1,7 +1,7 @@
 <!-- HTML -->
 <template>
   <div class="gamescreen">
-    <img :src="state.imgUrl">
+    <img :src="state.image">
     <div id="guessingbox">
       <p id="guesstitle">GUESS</p>
       <div id="container">
@@ -24,10 +24,10 @@
   import { reactive } from 'vue';
 
   const state = reactive({image: "", dateStart: 0, dateEnd: 0, artist: "", title: ""});
-
+  
   fetchArt().then(data => {
     console.log(data);
-        state.imgUrl = data.image;
+        state.image = data.image;
         state.dateStart = data.dateStart;
         state.dateEnd = data.dateEnd;
         state.artist = data.artist;
