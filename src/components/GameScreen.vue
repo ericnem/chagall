@@ -19,6 +19,16 @@
   
   <!-- JS -->
   <script>
+
+  import { fetchArt } from '../fetch.js';
+
+  fetchArt().then(data => {
+        console.log(data);
+    })
+    .catch(err => console.log(err));
+
+  
+
   export default {
     name: 'GameScreen',
     props: {
