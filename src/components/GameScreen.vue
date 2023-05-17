@@ -22,21 +22,6 @@
        <br>
        <br>
        <button id="confirms" @click="fillCircle">Confirm</button>
-  <div class="gamescreen">
-    <img :src="state.image">
-    <div id="guessingbox">
-      <p id="guesstitle">GUESS</p>
-      <div id="container">
-        <input id="guess" type="number" minlength="1" maxlength="4" required>
-        <select name="age" id="age" required>
-          <option value="A.D">A.D</option>
-          <option value="B.C">B.C</option>
-        </select>
-      </div>
-    </div>
-     <br>
-     <br>
-   <button id="confirms">Confirm</button>
   </div>
 </template>
   
