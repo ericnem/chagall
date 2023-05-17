@@ -1,149 +1,141 @@
 <!-- HTML -->
 <template>
-    <div class="gamescreen">
-      <div id="circle">
-        <span 
-        class="circle" 
-        v-for="index in 5" 
-          :key="index"
-          :class="{ filled: filledCircles >= index }"
-         ></span>
+  <div class="gamescreen">
+    <div id="circle">
+      <span 
+      class="circle" 
+      v-for="index in 5" 
+        :key="index"
+        :class="{ filled: filledCircles >= index }"
+       ></span>
+    </div>
+    <div id="guessingbox">
+      <p id="guesstitle">GUESS</p>
+      <div id="container">
+        <input id="guess" type="number" min="1" max="9999" required>
+        <select name="age" id="age" required>
+          <option value="A.D">A.D</option>
+          <option value="B.C">B.C</option>
+        </select>
       </div>
-      <div id="guessingbox">
-        <p id="guesstitle">GUESS</p>
-        <div id="container">
-          <input id="guess" type="number" minlength="1" maxlength="4" required>
-          <select name="age" id="age" required>
-            <option value="A.D">A.D</option>
-            <option value="B.C">B.C</option>
-          </select>
-        </div>
-      </div>
-       <br>
-       <br>
-       <button id="confirms" @click="fillCircle">Confirm</button>
-  </div>
+    </div>
+     <br>
+     <br>
+     <button id="confirms" @click="fillCircle">Confirm</button>
+</div>
 </template>
-  
-  <!-- JS -->
-  <script>
-  
-  export default {
-  name: 'GameScreen',
-  props: {
-    msg: String
-  },
-  
-  data() {
-    return {
-      filledCircles: 0
-    }
-  },
-  methods: {
-    fillCircle() {
-      if (this.filledCircles < 5) {
-        this.filledCircles++;
-      }
+
+<!-- JS -->
+<script>
+import { fetchArt } from '../fetch.js';
+import { reactive } from 'vue';
+
+export default {
+name: 'GameScreen',
+props: {
+  msg: String
+},
+
+data() {
+  return {
+    filledCircles: 0
+  }
+},
+methods: {
+  fillCircle() {
+    if (this.filledCircles < 5) {
+      this.filledCircles++;
     }
   }
-}
-  <script setup>
-  import { fetchArt } from '../fetch.js';
-  import { reactive } from 'vue';
-
+},
+setup() {
   const state = reactive({image: "", dateStart: 0, dateEnd: 0, artist: "", title: ""});
-  
+
   fetchArt().then(data => {
     console.log(data);
-        state.image = data.image;
-        state.dateStart = data.dateStart;
-        state.dateEnd = data.dateEnd;
-        state.artist = data.artist;
-        state.title = data.title;
-    })
-    .catch(err => console.log(err));
-
-  </script>
+    state.image = data.image;
+    state.dateStart = data.dateStart;
+    state.dateEnd = data.dateEnd;
+    state.artist = data.artist;
+    state.title = data.title;
+  })
+  .catch(err => console.log(err));
   
-  <!-- Add "scoped" attribute to limit CSS to this component only -->
-  <!-- CSS -->
-  <style scoped>
-  .circle {
-    margin-left: 8px;
-    height: 25px;
-    width: 25px;
-    border:1px solid #F5F5F5;
-    background-color:#F5F5F5;
-    border-radius: 50%;
-    display: inline-block;
+  return {
+    state
   }
+}
+}
+</script>
 
-  .filled{
-    background-color:orange; 
-  }
+<!-- CSS -->
+<style scoped>
+.circle {
+margin-left: 8px;
+height: 25px;
+width: 25px;
+border:1px solid #F5F5F5;
+background-color:#F5F5F5;
+border-radius: 50%;
+display: inline-block;
+}
 
+.filled{
+background-color:orange; 
+}
 
+#guesstitle{
+font-family:tahoma;
+margin-bottom:5px;
+}
 
-  #guesstitle{
-    font-family:tahoma;
-    margin-bottom:5px;
-  }
+#container{
+align-items:center;
+}
 
-  #guesslabel{
-    font-family:Tahoma;
-  }
+#guess{
+width:50px;
+height:10px;
+background-color:#F5F5F5;
+border-color:transparent;
+font-family:Tahoma;
+font-size:12px;
+padding-top:10px;
+}
 
- #container{
-  align-items:center;
- }
+#age{
+padding-top:8.65px;
+height:25px;
+font-size:12px;
+font-family:Tahoma;
+font-weight:bold;
+background-color: #F5F5F5;
+border:transparent;
+}
 
-  #guess{
-    width:50px;
-    height:10px;
-    background-color:#F5F5F5;
-    border-color:transparent;
-    font-family:Tahoma;
-    font-size:12px;
-    padding-top:10px;
-  }
+#guessingbox { 
+margin-left:auto;
+margin-right:auto;
+width:140px;
+height:80px;
+border: 2.5px solid black;
+border-radius:18px; 
+}
 
-  #age{
-    padding-top:8.65px;
-    height:25px;
-    font-size:12px;
-    font-family:Tahoma;
-    font-weight:bold;
-    background-color: #F5F5F5;
-    border:transparent;
-  }
+#confirms {
+color: black;
+background-color: #eeba2b;
+border: #eeba2b;
+font-family: Tahoma;
+font-weight:lighter;
+font-size: 20px;
+width: 120px;
+height: 30px;
+border-radius: 20px;
+}
 
-  #guessingbox { 
-    margin-left:auto;
-    margin-right:auto;
-    width:140px;
-    height:80px;
-    border: 2.5px solid black;
-    border-radius:18px; 
-  }
-
-
-
-  #confirms {
-    color: black;
-    background-color: #eeba2b;
-    border: #eeba2b;
-    font-family: Tahoma;
-    font-weight:lighter;
-    font-size: 20px;
-    width: 120px;
-    height: 30px;
-    border-radius: 20px;
-  }
-
-  #confirms:hover{
-    background-color: #b99225;
-    border: #b99225;
-  }
- 
-  
-  </style>
+#confirms:hover{
+background-color: #b99225;
+border: #b99225;
+}
+</style>
