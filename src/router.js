@@ -5,6 +5,7 @@ import GameScreen from './components/GameScreen.vue'
 const routes = [
   { path: '/', component: CoverPage },
   { path: '/game', component: GameScreen }
+   
 ]
 
 const router = createRouter({
