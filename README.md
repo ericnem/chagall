@@ -1,5 +1,7 @@
 # chagall
 
+Guess the year of the artwork
+
 ## Project setup
 ```
 npm install
@@ -22,6 +24,3 @@ npm run lint
 
 ### Customize configuration
 See [Configuration Reference](https://cli.vuejs.org/config/).
-# Chagall
-Guess the year of the artwork.
-# chagall
