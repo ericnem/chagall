@@ -4,28 +4,12 @@
 // *         startEra <= endEra
 // *         startDate <= endDate
 
-function pointDeduction(guess, startDate, endDate, startEra, endEra) {
+export function pointDeduction(guess, answer, startEra, endEra) {
 
   const maxScore = 1000; 
   // Error is raw difference between guess and correct range
-  var error = 0;
+  var error = Math.abs(answer-guess);
 
-  //  Target is the end of the range closest to the guess
-  var target = 0;
-
-  //  If guess is within correct range
-  if (guess >= startDate && guess <= endDate){
-    return maxScore; 
-  }
-  
-  if (guess < startDate) {
-    error = startDate - guess;
-    target = startDate;
-  } else {
-    error = guess - endDate;
-    target = endDate;
-  }
-  
   const range = endEra - startEra;
 
   // INITIAL STDEV IS THE ONLY THING THAT NEEDS TO BE MODIFIED ##
@@ -37,13 +21,13 @@ function pointDeduction(guess, startDate, endDate, startEra, endEra) {
   // Modifier is 1, i.e. has no effect, if the year is 2000
   //         is 2, i.e. doubles leniency, if the year is 1000 B.C.
   
-  const ageModifier = 2 - (target + maxScore)/ 3000;
+  const ageModifier = 2 - (answer + maxScore)/ 3000;
 
  // Standard deviation gets scaled by modifier
   
   stdev *= ageModifier;
 
-  var score = Math.round(1000 * Math.exp(-((guess-target)**2)/(2*(stdev**2))));
+  var score = Math.round(1000 * Math.exp(-((error)**2)/(2*(stdev**2))));
   
   return score;
 }
