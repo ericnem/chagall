@@ -27,10 +27,10 @@
         <div id="guessingbox">
         <p style = "font-size:25px;" id="guesstitle">GUESS</p>
         <div id="container">
-          <input style = "padding: 7px 0px 7px 0px" id="guess" type="number" min="1" max="9999" required>
-          <select name="age" id="age" required>
-            <option value="A.D">A.D.</option>
-            <option value="B.C">B.C.</option>
+          <input v-model="guess" style = "padding: 7px 0px 7px 0px" id="guess" type="number" min="1" max="9999" required>
+          <select v-model="age" name="age" id="age" required>
+            <option value=1>A.D.</option>
+            <option value=-1>B.C.</option>
           </select>
         </div>
       </div>
@@ -46,7 +46,8 @@
 <script>
 
 import { fetchPaintings } from '../getArt.js';
-import { reactive} from 'vue';
+import { reactive } from 'vue';
+import { pointDeduction } from '../score.js';
 
 export default {
 name: 'GameScreen',
@@ -57,6 +58,8 @@ props: {
 data() {
   return {
     roundNum: 1,
+    guess:0,
+    age:1,
     currentScore: 0,
     highScore: 0
   }
@@ -67,15 +70,17 @@ mounted() {
 }, 
 
 methods: {
+
   fillCircle() {
     if (this.roundNum < 5) {
       this.roundNum++;
-      this.currentScore += 50;
+      const answer = this.state.dates[this.roundNum-1];
+      this.currentScore += pointDeduction(this.guess * this.age,answer,-1000,2000);
     } else {
       this.endOfGame(); 
     }
   },
-
+  
   getHighScore(){
     return parseInt(localStorage.getItem('highScore'), 10);
   },
@@ -94,8 +99,6 @@ methods: {
       this.setHighScore(this.highScore)
     }
   }, 
-
-
 },
 
 setup() {
@@ -104,9 +107,9 @@ setup() {
   fetchPaintings().then(data => {
     for (let i = 0; i < 5; i++) {
       state.images.push(data[i].image);
-      state.titles.push(data[i].titles);
-      state.artists.push(data[i].artists);
-      state.dates.push(data[i].dates);
+      state.titles.push(data[i].title);
+      state.artists.push(data[i].artist);
+      state.dates.push(data[i].dateEnd);
     }
     })
   .catch(err => console.log(err));
