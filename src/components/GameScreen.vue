@@ -44,80 +44,78 @@
 
 <!-- JS -->
 <script>
-
 import { fetchPaintings } from '../getArt.js';
-import { reactive } from 'vue';
+import { reactive, ref, onMounted } from 'vue';
 import { pointDeduction } from '../score.js';
 
 export default {
-name: 'GameScreen',
-props: {
-  msg: String
-},
+  name: 'GameScreen',
+  props: {
+    msg: String
+  },
 
-data() {
-  return {
-    roundNum: 1,
-    guess:0,
-    age:1,
-    currentScore: 0,
-    highScore: 0
-  }
-},
+  setup() {
+    const roundNum = ref(1);
+    const currentScore = ref(0);
+    const highScore = ref(0);
+    const guess = ref(0);
+    const age = ref(1);
 
-mounted() {
-  this.highScore = this.getHighScore() || 0; 
-}, 
+    const state = reactive({images:[], titles:[], artists:[], dates:[]});
 
-methods: {
+    onMounted(() => {
+      highScore.value = getHighScore() || 0; 
+    });
 
-  fillCircle() {
-    if (this.roundNum < 5) {
-      this.roundNum++;
-      const answer = this.state.dates[this.roundNum-1];
-      this.currentScore += pointDeduction(this.guess * this.age,answer,-1000,2000);
-    } else {
-      this.endOfGame(); 
+    function getHighScore(){
+      return parseInt(localStorage.getItem('highScore'), 10);
     }
-  },
-  
-  getHighScore(){
-    return parseInt(localStorage.getItem('highScore'), 10);
-  },
 
-  setHighScore(){
-     localStorage.setItem('highScore', this.highScore);
-  },
-
-  updateScore(newScore) {
-    this.currentScore = newScore;
-  },
-
-  endOfGame(){
-    if(this.currentScore > this.highScore){
-      this.highScore = this.currentScore; 
-      this.setHighScore(this.highScore)
+    function setHighScore(){
+       localStorage.setItem('highScore', highScore.value);
     }
-  }, 
-},
 
-setup() {
-  const state = reactive({images:[], titles:[], artists:[], dates:[]});
+    function endOfGame(){
+      if(currentScore.value > highScore.value){
+        highScore.value = currentScore.value; 
+        setHighScore(highScore.value)
+      }
+    } 
 
-  fetchPaintings().then(data => {
+    function fillCircle() {
+      if (this.roundNum < 5) {
+        const answer = this.state.dates[this.roundNum-1];
+        this.roundNum++;
+        this.currentScore += pointDeduction(this.guess * this.age,answer,-1000,2000);
+      } else {
+        const answer = this.state.dates[this.roundNum-1];
+        this.roundNum++;
+        this.currentScore += pointDeduction(this.guess * this.age,answer,-1000,2000);
+        this.endOfGame(); 
+      }
+    }
+
+    fetchPaintings().then(data => {
     for (let i = 0; i < 5; i++) {
       state.images.push(data[i].image);
       state.titles.push(data[i].title);
       state.artists.push(data[i].artist);
       state.dates.push(data[i].dateEnd);
-    }
+      }
     })
   .catch(err => console.log(err));
-  
-  return {
-    state
+
+    return {
+      state,
+      guess,
+      age,
+      fillCircle,
+      endOfGame,
+      roundNum,
+      currentScore,
+      highScore
+    }
   }
-}
 }
 
 </script>
