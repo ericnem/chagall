@@ -45,8 +45,9 @@
 <!-- JS -->
 <script>
 import { fetchPaintings } from '../fetch.js';
-import { reactive, ref, onMounted } from 'vue';
+import { reactive, ref, onMounted, nextTick } from 'vue';
 import { pointDeduction } from '../score.js';
+import anime from 'animejs/lib/anime.es.js';
 
 export default {
   name: 'GameScreen',
@@ -60,6 +61,7 @@ export default {
     const highScore = ref(0);
     const guess = ref(0);
     const age = ref(1);
+    let tempScore = 0;
 
     const state = reactive({images:[], titles:[], artists:[], dates:[]});
 
@@ -83,17 +85,33 @@ export default {
     } 
 
     function fillCircle() {
-      if (this.roundNum < 5) {
-        const answer = this.state.dates[this.roundNum-1];
-        this.roundNum++;
-        this.currentScore += pointDeduction(this.guess * this.age,answer,-1000,2000);
-      } else {
-        const answer = this.state.dates[this.roundNum-1];
-        this.roundNum++;
-        this.currentScore += pointDeduction(this.guess * this.age,answer,-1000,2000);
-        this.endOfGame(); 
+      tempScore = currentScore.value; // store current score in a temporary variable
+  
+      if (roundNum.value < 5) {
+       const answer = state.dates[roundNum.value - 1];
+       roundNum.value++;
+       currentScore.value += pointDeduction(guess.value * age.value, answer, -1000, 2000);
+     } else {
+       const answer = state.dates[roundNum.value - 1];
+       roundNum.value++;
+       currentScore.value += pointDeduction(guess.value * age.value, answer, -1000, 2000);
+       endOfGame(); 
+  }
+
+  // Anime.js animation
+    anime({
+      targets: currentScore,
+      value: [tempScore, currentScore.value],
+      round: 1,
+      easing: 'easeInOutExpo',
+      duration: 1000,
+      update: async function() {
+        await nextTick(); // Ensures Vue is aware of the changes immediately
       }
-    }
+   });
+}
+
+
 
     fetchPaintings().then(data => {
     for (let i = 0; i < 5; i++) {
