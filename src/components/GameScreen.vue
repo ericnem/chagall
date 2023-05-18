@@ -12,10 +12,10 @@
       </div>
       <div>
         <div class="score-box" style = "background-color:#B0BDC1" id = "current-score">
-          Score <b>0</b>
+          Score <b>{{ currentScore }}</b>
         </div>
         <div class="score-box" style = "background-color:#B6CCD7" id = "hi-score">
-          Hi <b>0</b>
+          Hi <b>{{ highScore }}</b>
         </div>
       </div>
     </div>
@@ -56,15 +56,46 @@ props: {
 
 data() {
   return {
-    roundNum: 1
+    roundNum: 1,
+    currentScore: 0,
+    highScore: 0
   }
 },
+
+mounted() {
+  this.highScore = this.getHighScore() || 0; 
+}, 
+
 methods: {
   fillCircle() {
     if (this.roundNum < 5) {
       this.roundNum++;
+      this.currentScore += 50;
+    } else {
+      this.endOfGame(); 
     }
-  }
+  },
+
+  getHighScore(){
+    return parseInt(localStorage.getItem('highScore'), 10);
+  },
+
+  setHighScore(){
+     localStorage.setItem('highScore', this.highScore);
+  },
+
+  updateScore(newScore) {
+    this.currentScore = newScore;
+  },
+
+  endOfGame(){
+    if(this.currentScore > this.highScore){
+      this.highScore = this.currentScore; 
+      this.setHighScore(this.highScore)
+    }
+  }, 
+
+
 },
 
 setup() {
