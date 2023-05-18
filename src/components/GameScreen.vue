@@ -12,7 +12,7 @@
     <div id="guessingbox">
       <p id="guesstitle">GUESS</p>
       <div id="container">
-        <input id="guess" type="number" min="1" max="9999" required>
+        <input id="guess" type="number" min="1" max="4" required>
         <select name="age" id="age" required>
           <option value="A.D">A.D</option>
           <option value="B.C">B.C</option>
@@ -21,13 +21,61 @@
     </div>
      <br>
      <br>
+     <img :src= "state.image">
+     <br>
      <button id="confirms" @click="fillCircle">Confirm</button>
 </div>
 </template>
 
 <!-- JS -->
 <script>
-import { fetchArt } from '../fetch.js';
+/*import fetchPaintings from '../getArt.js'; // if it is default export
+import { reactive } from 'vue';
+
+export default {
+name: 'GameScreen',
+
+data() {
+  return {
+    filledCircles: 0,
+    artObjects: [],
+    currentIndex: 0,
+  }
+},
+
+methods: {
+  fillCircle() {
+    if (this.filledCircles < 5) {
+      this.filledCircles++;
+      this.currentIndex++;
+      this.state.image = this.artObjects[this.currentIndex].imageUrl;
+      this.state.dateEnd = this.artObjects[this.currentIndex].dateEnd;
+      this.state.artist = this.artObjects[this.currentIndex].artist;
+      this.state.title = this.artObjects[this.currentIndex].title;
+    }
+  }
+},
+
+setup() {
+  const state = reactive({image: "", dateEnd: 0, artist: "", title: ""});
+
+  fetchPaintings().then(data => {
+    console.log(data);
+    this.artObjects = data;
+    state.image = this.artObjects[this.currentIndex].imageUrl;
+    state.dateEnd = this.artObjects[this.currentIndex].dateEnd;
+    state.artist = this.artObjects[this.currentIndex].artist;
+    state.title = this.artObjects[this.currentIndex].title;
+  })
+  .catch(err => console.log(err));
+  
+  return {
+    state
+  }
+}
+}*/
+
+import { fetchPaintings } from '../getArt.js';
 import { reactive } from 'vue';
 
 export default {
@@ -48,16 +96,17 @@ methods: {
     }
   }
 },
-setup() {
-  const state = reactive({image: "", dateStart: 0, dateEnd: 0, artist: "", title: ""});
 
-  fetchArt().then(data => {
+setup() {
+  const state = reactive({image: "", dateEnd: 0, artist: "", title: ""});
+
+  fetchPaintings().then(data => {
     console.log(data);
-    state.image = data.image;
-    state.dateStart = data.dateStart;
-    state.dateEnd = data.dateEnd;
-    state.artist = data.artist;
-    state.title = data.title;
+    this.artObjects = data;
+    state.image = this.artObjects[this.currentIndex].imageUrl;
+    state.dateEnd = this.artObjects[this.currentIndex].dateEnd;
+    state.artist = this.artObjects[this.currentIndex].artist;
+    state.title = this.artObjects[this.currentIndex].title;
   })
   .catch(err => console.log(err));
   
@@ -66,6 +115,7 @@ setup() {
   }
 }
 }
+
 </script>
 
 <!-- CSS -->
