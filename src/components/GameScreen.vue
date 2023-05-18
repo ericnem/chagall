@@ -44,7 +44,7 @@
 
 <!-- JS -->
 <script>
-import { fetchPaintings } from '../getArt.js';
+import { fetchPaintings } from '../fetch.js';
 import { reactive, ref, onMounted } from 'vue';
 import { pointDeduction } from '../score.js';
 

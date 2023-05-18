@@ -1,59 +1,46 @@
-import axios from 'axios'
-import Round from './round.js';
+import axios from 'axios';
+import Art from './art.js';
 
-// fetchArt() returns data about a random painting as an array:
-// {imgUrl, title, dateEnd, dateStart, artist}
+export const fetchPaintings = async () => {
+  const artArr = [];
+  let ids = [];
 
-export function fetchArt() {
+  const res = await axios.get('https://collectionapi.metmuseum.org/public/collection/v1/search?hasImages=true&medium=Paintings&q=paintings');
 
-  const MAX_PAGES = 597;
-  const RECORDS_PER_PAGE = 10;
+  if (res.data && res.data.objectIDs) {
+    ids = res.data.objectIDs;
+  } else {
+    console.log("Invalid Data");
+    return;
+  }
 
-  const recordIndex = Math.floor(Math.random()*(RECORDS_PER_PAGE-1));
-  const pageNum = Math.floor(Math.random()*MAX_PAGES)
+  let fetchedIds = [];  // Store fetched ids to avoid duplicate id's
 
-  const apiKey = 'ef9c3839-3c0a-4873-ae28-b2103b7d076b';
-  const apiUrl = 'https://api.harvardartmuseums.org/object';
+  while(artArr.length < 5) {
+    const randomId = ids[Math.floor(Math.random() * ids.length)];
 
-  return axios.get(apiUrl, {
-    params: {
-      hasimage:1,
-      apikey: apiKey,
-      classification: "Paintings",
-      page: pageNum
-    }
-  }).then(response => {
-    var imgUrl = ""
-    
-    try {
-      imgUrl = response.data.records[recordIndex].images[0].baseimageurl + "?height=500&width=500";
-    } catch (error) {
-      console.error(error);
-    }
-    
-    const title = response.data.records[recordIndex].title
-    const dateEnd = response.data.records[recordIndex].dateend
-    const dateStart = response.data.records[recordIndex].datebegin
-    const contributors = response.data.records[recordIndex].people
-    var artist = "Not found"
-    
-    try {
-      for (let i = 0; i < 3; i++) {
-        if (contributors[i].role == "Artist") {
-          artist = contributors[i].displayname;
-          break;
+    if (!fetchedIds.includes(randomId)) {
+      try {
+        const result = await axios.get(`https://collectionapi.metmuseum.org/public/collection/v1/objects/${randomId}`);
+
+        // Check if the result has data and that primaryImage is not an empty string
+        if (result.data && result.data.primaryImage) {
+          const art = new Art(
+            result.data.primaryImage,
+            result.data.title,
+            result.data.objectEndDate,
+            result.data.artistDisplayName,
+          );
+          // Push Art Object into the art array
+          artArr.push(art);
+          fetchedIds.push(randomId);
         }
+      } catch (error) {
+        // Log the error but continue with the next ID
+        console.log(`Error fetching data for ID ${randomId}:`, error.message);
       }
-    } catch(error){
-      console.error(error);
     }
-    
-    // const artData = [imgUrl, title, dateEnd, dateStart, artist];
-    let round = new Round(imgUrl, title, dateStart, dateEnd, artist);
-    return round;
-  })
-  .catch(error => {
-    console.log(error);
-    fetchArt();
-  })
+  }
+
+  return artArr;
 }
