@@ -1,79 +1,50 @@
 <!-- HTML -->
+<!-- HTML -->
 <template>
-  <div class="gamescreen">
-    <div id="circle">
-      <span 
-      class="circle" 
-      v-for="index in 5" 
-        :key="index"
-        :class="{ filled: filledCircles >= index }"
-       ></span>
-    </div>
-    <div id="guessingbox">
-      <p id="guesstitle">GUESS</p>
-      <div id="container">
-        <input id="guess" type="number" min="1" max="4" required>
-        <select name="age" id="age" required>
-          <option value="A.D">A.D</option>
-          <option value="B.C">B.C</option>
-        </select>
+  <div class="bigscreen">
+    <div class = "header">
+      <div class="circles">
+        <span
+        class="circle"
+        v-for="index in 5"
+          :key="index"
+          :class="{ filled: filledCircles >= index }"
+        ></span>
+      </div>
+      <div>
+        <div class="score-box" style = "background-color:#B0BDC1" id = "current-score">
+          Score <b>0</b>
+        </div>
+        <div class="score-box" style = "background-color:#B6CCD7" id = "hi-score">
+          Hi <b>0</b>
+        </div>
       </div>
     </div>
-     <br>
-     <br>
-     <img :src= "state.image">
-     <br>
-     <button id="confirms" @click="fillCircle">Confirm</button>
-</div>
-</template>
+    <div class="gamescreen">
+      <div class="left">
+        <img :src= "state.image">
+      </div>
+      <div class="right">
+        <div id="guessingbox">
+        <p style = "font-size:25px;" id="guesstitle">GUESS</p>
+        <div id="container">
+          <input style = "padding: 7px 0px 7px 0px" id="guess" type="number" min="1" max="9999" required>
+          <select name="age" id="age" required>
+            <option value="A.D">A.D</option>
+            <option value="B.C">B.C</option>
+          </select>
+        </div>
+      </div>
+      <br>
+      <br>
+      <button id="confirms" @click="fillCircle">Confirm</button>
+      </div>
+    </div>
+  </div>
+ </template>
 
 <!-- JS -->
 <script>
-/*import fetchPaintings from '../getArt.js'; // if it is default export
-import { reactive } from 'vue';
-
-export default {
-name: 'GameScreen',
-
-data() {
-  return {
-    filledCircles: 0,
-    artObjects: [],
-    currentIndex: 0,
-  }
-},
-
-methods: {
-  fillCircle() {
-    if (this.filledCircles < 5) {
-      this.filledCircles++;
-      this.currentIndex++;
-      this.state.image = this.artObjects[this.currentIndex].imageUrl;
-      this.state.dateEnd = this.artObjects[this.currentIndex].dateEnd;
-      this.state.artist = this.artObjects[this.currentIndex].artist;
-      this.state.title = this.artObjects[this.currentIndex].title;
-    }
-  }
-},
-
-setup() {
-  const state = reactive({image: "", dateEnd: 0, artist: "", title: ""});
-
-  fetchPaintings().then(data => {
-    console.log(data);
-    this.artObjects = data;
-    state.image = this.artObjects[this.currentIndex].imageUrl;
-    state.dateEnd = this.artObjects[this.currentIndex].dateEnd;
-    state.artist = this.artObjects[this.currentIndex].artist;
-    state.title = this.artObjects[this.currentIndex].title;
-  })
-  .catch(err => console.log(err));
-  
-  return {
-    state
-  }
-}
-}*/
 
 import { fetchPaintings } from '../getArt.js';
 import { reactive,ref } from 'vue';
@@ -122,6 +93,51 @@ setup() {
 
 <!-- CSS -->
 <style scoped>
+.circles {
+ width: 70%;
+}
+.score-box {
+           display: inline-block;
+           padding-top: 4%;
+           padding-bottom: 4%;
+           padding-left:20px;
+           padding-right:20px;
+           background-color: #e6e6e6;
+           margin-left: 30px;
+           font-size:25px;
+}
+.header {
+ padding-top: 4%;
+ position: relative;
+ display: flex;
+ align-items:center;
+ justify-content: center;
+}
+.bigscreen {
+ width: 99vw;
+ height:95vh;
+}
+.gamescreen {
+ height: 70%;
+ margin: auto;
+ padding: 10px;
+ position: relative;
+ display: flex;
+ align-items: end;
+ bottom:0;
+}
+.left {
+ display: flex;
+ justify-content: center;
+ align-items: center;
+ height: 90%;
+ width: 40%;
+ float: left;}
+.right {
+ height: 90%;
+ width: 55%;
+ float: left;
+}
 .circle {
 margin-left: 8px;
 height: 25px;
@@ -132,47 +148,64 @@ border-radius: 50%;
 display: inline-block;
 }
 
+
 .filled{
-background-color:orange; 
+background-color:#eeba2b;
 }
+
 
 #guesstitle{
 font-family:tahoma;
 margin-bottom:5px;
 }
 
+
 #container{
 align-items:center;
 }
 
+
 #guess{
-width:50px;
-height:10px;
+text-align:center;
 background-color:#F5F5F5;
 border-color:transparent;
 font-family:Tahoma;
-font-size:12px;
-padding-top:10px;
+font-size:20px;
+padding-top:5px;
 }
+#guess::-webkit-outer-spin-button,
+#guess::-webkit-inner-spin-button {
+ -webkit-appearance: none;
+ margin: 0;
+}
+
 
 #age{
-padding-top:8.65px;
-height:25px;
-font-size:12px;
+padding-top:8px;
+height:100%;
+font-size:20px;
 font-family:Tahoma;
-font-weight:bold;
 background-color: #F5F5F5;
 border:transparent;
+padding-bottom:8px;
 }
 
-#guessingbox { 
+
+#age::-ms-expand {
+   display: none;
+}
+
+
+#guessingbox {
 margin-left:auto;
 margin-right:auto;
-width:140px;
-height:80px;
-border: 2.5px solid black;
-border-radius:18px; 
+margin-top:10%;
+width:20%;
+height:25%;
+border: 4px solid black;
+border-radius:30px;
 }
+
 
 #confirms {
 color: black;
@@ -180,11 +213,12 @@ background-color: #eeba2b;
 border: #eeba2b;
 font-family: Tahoma;
 font-weight:lighter;
-font-size: 20px;
-width: 120px;
-height: 30px;
-border-radius: 20px;
+font-size: 30px;
+width: 25%;
+height: 12%;
+border-radius: 30px;
 }
+
 
 #confirms:hover{
 background-color: #b99225;
