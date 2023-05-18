@@ -67,14 +67,14 @@ export default {
 
 #startbutton {
   color: black;
-  background-color: #eeba2b;
-  border: #eeba2b;
-  font-family: Tahoma;
+  background-color:gold;
+  border: gold;
+  font-family: Helvetica, sans-serif;
   font-weight: bold;
   font-size: 20px;
   width: 160px;
   height: 30px;
-  border-radius: 20px;
+  border-radius: 7px;
   position: relative;
   animation: slideUp 1.55s ease-out forwards;
 }

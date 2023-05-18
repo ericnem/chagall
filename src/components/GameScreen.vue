@@ -29,8 +29,8 @@
         <div id="container">
           <input v-model="guess" style = "padding: 7px 0px 7px 0px" id="guess" type="number" min="1" max="9999" required>
           <select v-model="age" name="age" id="age" required>
-            <option value=1>A.D.</option>
-            <option value=-1>B.C.</option>
+            <option value=1>A.D</option>
+            <option value=-1>B.C</option>
           </select>
         </div>
       </div>
@@ -127,6 +127,8 @@ export default {
  padding-left:20%
 }
 .score-box {
+           font-family: Helvetica, sans-serif;
+           font-weight: bold;
            display: inline-block;
            padding-top: 4%;
            padding-bottom: 4%;
@@ -135,6 +137,7 @@ export default {
            background-color: #e6e6e6;
            margin-left: 30px;
            font-size:25px;
+           border-radius:8px;
 }
 .header {
  padding-top: 4%;
@@ -181,13 +184,14 @@ display: inline-block;
 
 
 .filled{
-background-color:#eeba2b;
+background-color:gold;
 }
 
 
 #guesstitle{
-font-family:tahoma;
-margin-bottom:5px;
+font-family:Helvetica, sans-serif;
+font-weight:bold; 
+margin-bottom:8px;
 }
 
 
@@ -200,7 +204,7 @@ align-items:center;
 text-align:center;
 background-color:#F5F5F5;
 border-color:transparent;
-font-family:Tahoma;
+font-family: Helvetica, sans serif; 
 font-size:20px;
 padding-top:5px;
 }
@@ -215,7 +219,8 @@ padding-top:5px;
 padding-top:8px;
 height:100%;
 font-size:20px;
-font-family:Tahoma;
+font-family:Helvetica,sans-serif;
+font-weight:bold;
 background-color: #F5F5F5;
 border:transparent;
 padding-bottom:8px;
@@ -228,11 +233,12 @@ padding-bottom:8px;
 
 
 #guessingbox {
+font-family: Helvertica,sans-serif;
 margin-left:auto;
 margin-right:auto;
 margin-top:10%;
 width:20%;
-height:22%;
+height:28%;
 border: 4px solid black;
 border-radius:30px;
 }
@@ -240,14 +246,14 @@ border-radius:30px;
 
 #confirms {
 color: black;
-background-color: #eeba2b;
-border: #eeba2b;
-font-family: Tahoma;
-font-weight:lighter;
+background-color: gold;
+border: gold;
+font-family: Helvetica,sans-serif;
+font-weight:bold;
 font-size: 30px;
 width: 25%;
 height: 10%;
-border-radius: 30px;
+border-radius: 8px;
 }
 
 
@@ -255,4 +261,6 @@ border-radius: 30px;
 background-color: #b99225;
 border: #b99225;
 }
+
+
 </style>
