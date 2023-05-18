@@ -76,7 +76,7 @@ setup() {
 }*/
 
 import { fetchPaintings } from '../getArt.js';
-import { reactive } from 'vue';
+import { reactive,ref } from 'vue';
 
 export default {
 name: 'GameScreen',
@@ -99,15 +99,17 @@ methods: {
 
 setup() {
   const state = reactive({image: "", dateEnd: 0, artist: "", title: ""});
+  const artObjects = ref([]); // New reactive reference
+  const currentIndex = ref(0); // Assuming this is intended to be reactive state
 
   fetchPaintings().then(data => {
     console.log(data);
-    this.artObjects = data;
-    state.image = this.artObjects[this.currentIndex].imageUrl;
-    state.dateEnd = this.artObjects[this.currentIndex].dateEnd;
-    state.artist = this.artObjects[this.currentIndex].artist;
-    state.title = this.artObjects[this.currentIndex].title;
-  })
+      artObjects.value = data;
+      state.image = artObjects.value[currentIndex.value].imageUrl;
+      state.dateEnd = artObjects.value[currentIndex.value].dateEnd;
+      state.artist = artObjects.value[currentIndex.value].artist;
+      state.title = artObjects.value[currentIndex.value].title;
+    })
   .catch(err => console.log(err));
   
   return {
