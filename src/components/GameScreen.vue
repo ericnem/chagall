@@ -21,8 +21,8 @@
     </div>
     <div class="gamescreen">
       <div class="left">
-        <img style = "max-width: 100%; max-height: 100%; padding-left:5%" :src= "state.images[roundNum-1]">
-      </div>
+        <img v-if="loadedImages[roundNum-1]" style="max-width: 100%; max-height: 100%; padding-left:5%" :src="state.images[roundNum-1]" :key="state.images[roundNum-1]">
+      </div> 
       <div class="right">
         <div id="guessingbox">
         <p style = "font-size:25px;" id="guesstitle">GUESS</p>
@@ -56,6 +56,7 @@ export default {
   },
 
   setup() {
+    const loadedImages = reactive([false, false, false, false, false]);
     const roundNum = ref(1);
     const currentScore = ref(0);
     const highScore = ref(0);
@@ -119,7 +120,12 @@ export default {
       state.titles.push(data[i].title);
       state.artists.push(data[i].artist);
       state.dates.push(data[i].dateEnd);
-      }
+      
+      const img = new Image(); // create a new image object
+      img.onload = () => { loadedImages[i] = true }; // when the image has loaded, set the corresponding loadedImages index to true
+      img.src = data[i].image; // set the source of the image
+    
+    }
     })
   .catch(err => console.log(err));
 
@@ -131,7 +137,8 @@ export default {
       endOfGame,
       roundNum,
       currentScore,
-      highScore
+      highScore,
+      loadedImages
     }
   }
 }
@@ -144,18 +151,19 @@ export default {
  width: 50%;
  padding-left:20%
 }
+
 .score-box {
-           font-family: Helvetica, sans-serif;
-           font-weight: bold;
-           display: inline-block;
-           padding-top: 4%;
-           padding-bottom: 4%;
-           padding-left:20px;
-           padding-right:20px;
-           background-color: #e6e6e6;
-           margin-left: 30px;
-           font-size:25px;
-           border-radius:8px;
+ font-family: Helvetica, sans-serif;
+ font-weight: bold;
+ display: inline-block;
+ padding-top: 4%;
+ padding-bottom: 4%;
+ padding-left:20px;
+ padding-right:20px;
+ background-color: #e6e6e6;
+ margin-left: 30px;
+ font-size:25px;
+ border-radius:8px;
 }
 .header {
  padding-top: 4%;
@@ -279,6 +287,5 @@ border-radius: 8px;
 background-color: #b99225;
 border: #b99225;
 }
-
 
 </style>
