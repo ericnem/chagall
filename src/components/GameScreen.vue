@@ -1,5 +1,4 @@
 <!-- HTML -->
-<!-- HTML -->
 <template>
   <div class="bigscreen">
     <div class = "header">
@@ -8,7 +7,7 @@
         class="circle"
         v-for="index in 5"
           :key="index"
-          :class="{ filled: filledCircles >= index }"
+          :class="{ filled: roundNum >= index }"
         ></span>
       </div>
       <div>
@@ -22,7 +21,7 @@
     </div>
     <div class="gamescreen">
       <div class="left">
-        <img :src= "state.image">
+        <img style = "max-width: 100%; max-height: 100%;" :src= "state.images[roundNum-1]">
       </div>
       <div class="right">
         <div id="guessingbox">
@@ -47,7 +46,7 @@
 <script>
 
 import { fetchPaintings } from '../getArt.js';
-import { reactive,ref } from 'vue';
+import { reactive} from 'vue';
 
 export default {
 name: 'GameScreen',
@@ -57,29 +56,27 @@ props: {
 
 data() {
   return {
-    filledCircles: 0
+    roundNum: 1
   }
 },
 methods: {
   fillCircle() {
-    if (this.filledCircles < 5) {
-      this.filledCircles++;
+    if (this.roundNum < 5) {
+      this.roundNum++;
     }
   }
 },
 
 setup() {
-  const state = reactive({image: "", dateEnd: 0, artist: "", title: ""});
-  const artObjects = ref([]); // New reactive reference
-  const currentIndex = ref(0); // Assuming this is intended to be reactive state
+  const state = reactive({images:[], titles:[], artists:[], dates:[]});
 
   fetchPaintings().then(data => {
-    console.log(data);
-      artObjects.value = data;
-      state.image = artObjects.value[currentIndex.value].imageUrl;
-      state.dateEnd = artObjects.value[currentIndex.value].dateEnd;
-      state.artist = artObjects.value[currentIndex.value].artist;
-      state.title = artObjects.value[currentIndex.value].title;
+    for (let i = 0; i < 5; i++) {
+      state.images.push(data[i].image);
+      state.titles.push(data[i].titles);
+      state.artists.push(data[i].artists);
+      state.dates.push(data[i].dates);
+    }
     })
   .catch(err => console.log(err));
   
