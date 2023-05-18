@@ -21,7 +21,7 @@
     </div>
     <div class="gamescreen">
       <div class="left">
-        <img style = "max-width: 100%; max-height: 100%;" :src= "state.images[roundNum-1]">
+        <img style = "max-width: 100%; max-height: 100%; padding-left:5%" :src= "state.images[roundNum-1]">
       </div>
       <div class="right">
         <div id="guessingbox">
@@ -29,8 +29,8 @@
         <div id="container">
           <input style = "padding: 7px 0px 7px 0px" id="guess" type="number" min="1" max="9999" required>
           <select name="age" id="age" required>
-            <option value="A.D">A.D</option>
-            <option value="B.C">B.C</option>
+            <option value="A.D">A.D.</option>
+            <option value="B.C">B.C.</option>
           </select>
         </div>
       </div>
@@ -91,7 +91,8 @@ setup() {
 <!-- CSS -->
 <style scoped>
 .circles {
- width: 70%;
+ width: 50%;
+ padding-left:20%
 }
 .score-box {
            display: inline-block;
@@ -115,21 +116,22 @@ setup() {
  height:95vh;
 }
 .gamescreen {
- height: 70%;
+ height: 80%;
  margin: auto;
  padding: 10px;
  position: relative;
  display: flex;
- align-items: end;
+ align-items: flex-end;
  bottom:0;
 }
 .left {
  display: flex;
  justify-content: center;
  align-items: center;
- height: 90%;
- width: 40%;
- float: left;}
+ height: 100%;
+ width: 45%;
+ float: left;
+}
 .right {
  height: 90%;
  width: 55%;
@@ -198,7 +200,7 @@ margin-left:auto;
 margin-right:auto;
 margin-top:10%;
 width:20%;
-height:25%;
+height:22%;
 border: 4px solid black;
 border-radius:30px;
 }
@@ -212,7 +214,7 @@ font-family: Tahoma;
 font-weight:lighter;
 font-size: 30px;
 width: 25%;
-height: 12%;
+height: 10%;
 border-radius: 30px;
 }
 
