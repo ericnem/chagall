@@ -99,7 +99,7 @@ export default {
        endOfGame(); 
   }
 
-  // Anime.js animation
+  // animation
     anime({
       targets: currentScore,
       value: [tempScore, currentScore.value],
@@ -107,7 +107,7 @@ export default {
       easing: 'easeInOutExpo',
       duration: 1000,
       update: async function() {
-        await nextTick(); // Ensures Vue is aware of the changes immediately
+        await nextTick(); 
       }
    });
 }
@@ -121,8 +121,8 @@ export default {
       state.artists.push(data[i].artist);
       state.dates.push(data[i].dateEnd);
       
-      const img = new Image(); // create a new image object
-      img.onload = () => { loadedImages[i] = true }; // when the image has loaded, set the corresponding loadedImages index to true
+      const img = new Image(); 
+      img.onload = () => { loadedImages[i] = true }; // when the image has loaded, set the loadedImages index to true
       img.src = data[i].image; // set the source of the image
     
     }
@@ -287,5 +287,4 @@ border-radius: 8px;
 background-color: #b99225;
 border: #b99225;
 }
-
 </style>
