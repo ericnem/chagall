@@ -25,18 +25,27 @@
       </div> 
       <div class="right">
         <div id="guessingbox">
-        <p style = "font-size:25px;" id="guesstitle">GUESS</p>
-        <div id="container">
-          <input v-model="guess" style = "padding: 7px 0px 7px 0px" id="guess" type="number" min="1" max="9999" required>
-          <select v-model="age" name="age" id="age" required>
-            <option value=1>A.D</option>
-            <option value=-1>B.C</option>
-          </select>
+          <p style = "font-size:25px;" id="guesstitle">GUESS</p>
+          <div id="container">
+            <input v-model= "guessabs" @input="guess= guessabs*age" style = "padding: 7px 0px 7px 0px" id="guess" type="number" min="1" max="9999" required>
+            <select v-model="age" @change="guess = guessabs*age" name="age" id="age" required>
+              <option value=1>A.D</option>
+              <option value=-1>B.C</option>
+            </select>
+          </div>
         </div>
-      </div>
-      <br>
-      <br>
-      <button id="confirms" @click="fillCircle">Confirm</button>
+        <div class="sliderlabels">
+          <b style="float:left">{{makeLabel(startEra)}}</b>
+          <b style="float:right">{{makeLabel(endEra)}}</b>
+        </div>
+        
+        <div class="slidecontainer">
+          <input v-model="guess" @input="updateAge" type="range" v-bind:min= "startEra" v-bind:max="endEra" class="slider" id="myRange">
+        </div>
+        <i style = "color:#B0BDC1">Drag the slider or type your answer</i>
+        <br>
+        <br>
+        <button id="confirms" @click="fillCircle">Confirm</button>
       </div>
     </div>
   </div>
@@ -60,8 +69,12 @@ export default {
     const roundNum = ref(1);
     const currentScore = ref(0);
     const highScore = ref(0);
-    const guess = ref(0);
+    const guess = ref(1);
+    const guessabs = ref(1);
     const age = ref(1);
+    const startEra = ref(-500);
+    const endEra = ref(2000);
+
     let tempScore = 0;
 
     const state = reactive({images:[], titles:[], artists:[], dates:[]});
@@ -69,6 +82,27 @@ export default {
     onMounted(() => {
       highScore.value = getHighScore() || 0; 
     });
+
+    function makeLabel(year) {
+      let label = year.toString();
+      if (year < 0) {
+        label += " B.C."
+      } else {
+        label += " A.D."
+      }
+      return label
+    }
+
+    function updateAge() {
+      guessabs.value = Math.abs(guess.value);
+      if (guess.value < 0) {
+        age.value = -1;
+      } else if (guess.value > 0) {
+        age.value = 1;
+      } else if (guess.value == 0){
+        guess.value = 1;
+      }
+    }
 
     function getHighScore(){
       return parseInt(localStorage.getItem('highScore'), 10);
@@ -91,11 +125,11 @@ export default {
       if (roundNum.value < 5) {
        const answer = state.dates[roundNum.value - 1];
        roundNum.value++;
-       currentScore.value += pointDeduction(guess.value * age.value, answer, -500, 2000);
+       currentScore.value += pointDeduction(guess.value, answer, startEra.value, endEra.value);
      } else {
        const answer = state.dates[roundNum.value - 1];
        roundNum.value++;
-       currentScore.value += pointDeduction(guess.value * age.value, answer, -500, 2000);
+       currentScore.value += pointDeduction(guess.value, answer, startEra.value, endEra.value);
        endOfGame(); 
   }
 
@@ -132,9 +166,14 @@ export default {
     return {
       state,
       guess,
+      guessabs,
       age,
+      startEra,
+      endEra,
       fillCircle,
+      makeLabel,
       endOfGame,
+      updateAge,
       roundNum,
       currentScore,
       highScore,
@@ -147,6 +186,56 @@ export default {
 
 <!-- CSS -->
 <style scoped>
+
+.sliderlabels {
+  width:90%;
+  display: inline-block;
+  position: relative;
+  align-items: flex-end;
+}
+.slidecontainer {
+  width: 90%; /* Width of the outside container */
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 5%;
+}
+.slider {
+  -webkit-appearance: none;  /* Override default CSS styles */
+  appearance: none;
+  width: 100%; /* Full-width */
+  height: 5px; /* Specified height */
+  background:black; /* Grey background */
+  outline: none; /* Remove outline */
+  opacity: 0.7; /* Set transparency (for mouse-over effects on hover) */
+  -webkit-transition: .2s; /* 0.2 seconds transition on hover */
+  transition: opacity .2s;
+  margin-left:6%;
+  border-radius: 30%;
+}
+
+/* Mouse-over effects */
+.slider:hover {
+  opacity: 1; /* Fully shown on mouse-over */
+}
+
+/* The slider handle (use -webkit- (Chrome, Opera, Safari, Edge) and -moz- (Firefox) to override default look) */
+.slider::-webkit-slider-thumb {
+  -webkit-appearance: none; /* Override default look */
+  appearance: none;
+  width: 20px; /* Set a specific slider handle width */
+  height: 20px; /* Slider handle height */
+  background: rgb(255, 218, 11); /* Green background */
+  border-radius: 10px;
+  cursor: pointer; /* Cursor on hover */
+}
+
+.slider::-moz-range-thumb {
+  width: 25px; /* Set a specific slider handle width */
+  height: 25px; /* Slider handle height */
+  background: yellow; /* Green background */
+  cursor: pointer; /* Cursor on hover */
+}
+
 .circles {
  width: 50%;
  padding-left:20%
@@ -195,8 +284,10 @@ export default {
 }
 .right {
  height: 90%;
- width: 55%;
+ width: 50%;
  float: left;
+ justify-content: center;
+ align-items: center;
 }
 .circle {
 margin-left: 8px;
@@ -232,7 +323,6 @@ background-color:#F5F5F5;
 border-color:transparent;
 font-family: Helvetica, sans serif; 
 font-size:20px;
-padding-top:5px;
 }
 #guess::-webkit-outer-spin-button,
 #guess::-webkit-inner-spin-button {
@@ -264,7 +354,7 @@ margin-left:auto;
 margin-right:auto;
 margin-top:10%;
 width:20%;
-height:28%;
+height:23%;
 border: 4px solid black;
 border-radius:30px;
 }
@@ -280,6 +370,7 @@ font-size: 30px;
 width: 25%;
 height: 10%;
 border-radius: 8px;
+margin-top: 5%;
 }
 
 
