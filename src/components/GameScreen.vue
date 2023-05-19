@@ -84,7 +84,7 @@ export default {
     });
 
     function makeLabel(year) {
-      let label = year.toString();
+      let label = (Math.abs(year)).toString();
       if (year < 0) {
         label += " B.C."
       } else {
