@@ -16,7 +16,7 @@ export function pointDeduction(guess, answer, startEra, endEra) {
   // CAN BE DIVIDED BY A HIGHER NUMBER TO MAKE IT MORE SENSITIVE ##
   //OR DIVIDED BY A LOWER NUMBER TO MAKE IT LESS SENSITIVE ##
   
-  var stdev = range/10;
+  var stdev = range/15;
 
   // Modifier is 1, i.e. has no effect, if the year is 2000
   //         is 2, i.e. doubles leniency, if the year is 1000 B.C.

@@ -91,11 +91,11 @@ export default {
       if (roundNum.value < 5) {
        const answer = state.dates[roundNum.value - 1];
        roundNum.value++;
-       currentScore.value += pointDeduction(guess.value * age.value, answer, -1000, 2000);
+       currentScore.value += pointDeduction(guess.value * age.value, answer, -500, 2000);
      } else {
        const answer = state.dates[roundNum.value - 1];
        roundNum.value++;
-       currentScore.value += pointDeduction(guess.value * age.value, answer, -1000, 2000);
+       currentScore.value += pointDeduction(guess.value * age.value, answer, -500, 2000);
        endOfGame(); 
   }
 
