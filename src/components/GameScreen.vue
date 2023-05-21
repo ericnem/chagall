@@ -133,7 +133,7 @@ export default {
        endOfGame(); 
   }
 
-  // animation
+  // Number animation
     anime({
       targets: currentScore,
       value: [tempScore, currentScore.value],

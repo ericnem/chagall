@@ -1,15 +1,23 @@
 <!-- HTML -->
 <template>
   <div class="coverpage">
-    <img id="coverImg" alt="chagall cover" :src="require('@/assets/cover_frame.png')" width="225" height="295">
-      <br> 
-        <br>
-          <button id="startbutton"  @click="$router.push('/game')">Start Game</button>
-            <footer>
-              <br>
-                <p id="footer"> 
+    <head><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"></head>
+    <audio ref="audioRef" autoplay muted>
+      <source :src="require('@/assets/cover_audio.mp3')" type="audio/mpeg">
+    </audio>
+    <button class="sound-button" @click="toggleMute">
+    <i class="fas fa-volume-up" v-if="!isMuted"></i>
+    <i class="fas fa-volume-mute" v-else></i>
+    </button>
+      <img id="coverImg" alt="chagall cover" :src="require('@/assets/cover_frame.png')" width="225" height="295">
+        <br> 
+          <br>
+            <button id="startbutton"  @click="$router.push('/game')">Start Game</button>
+              <footer>
+               <br>
+                 <p id="footer"> 
                   made by <a href="https://www.linkedin.com/in/tal-cohen-kleinstein-515a12261/" target="_blank"> <strong>tcohenkl</strong></a>
-                  and <a href="https://www.linkedin.com/in/eric-nemrodov-44738b241/" target="_blank"><strong>ericnem</strong></a>
+                  <strong> and </strong><a href="https://www.linkedin.com/in/eric-nemrodov-44738b241/" target="_blank"><strong>ericnem</strong></a>
                 </p>
               <br>
            </footer>
@@ -18,17 +26,58 @@
 
 <!-- JS -->
 <script>
+import { ref, onMounted } from 'vue';
+
 export default {
   name: 'CoverPage',
-  props: {
-    msg: String
-  }
-}
+  setup() {
+    const audioRef = ref(null); //initially points to nothing
+    const isMuted = ref(true);
+
+    onMounted(() => {
+      audioRef.value = document.querySelector('audio');
+    });
+
+    const toggleMute = () => {
+      isMuted.value = !isMuted.value;
+      audioRef.value.muted = isMuted.value;
+      if (!isMuted.value && audioRef.value.paused) {
+        audioRef.value.play().catch(e => {
+          console.error('Playback failed.', e);
+        });
+    }
+   };
+    
+
+    return {
+      audioRef,
+      isMuted,
+      toggleMute    
+    };
+  },
+};
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <!-- CSS -->
 <style scoped>
+
+.sound-button {
+  background-color:transparent;
+  border-color:transparent;
+  margin-left: 1250px;
+  transition: all 0.5s ease;
+}
+
+.sound-button .fas {
+  transition: all 0.5s ease;
+  font-size: 24px; /* To change size of Mute Icon*/
+  color:black;
+}
+
+.sound-button:hover .fas {
+  transform: rotate(45deg);
+}
 
 #coverImg {
   display:block;
