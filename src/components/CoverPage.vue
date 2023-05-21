@@ -26,7 +26,7 @@
 
 <!-- JS -->
 <script>
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, onUnmounted } from 'vue';
 
 export default {
   name: 'CoverPage',
@@ -34,8 +34,20 @@ export default {
     const audioRef = ref(null); //initially points to nothing
     const isMuted = ref(true);
 
+    const restartAudio = () => {
+      audioRef.value.currentTime = 0;
+      audioRef.value.play().catch(e => {
+        console.error('Playback failed.', e);
+      });
+    };
+
     onMounted(() => {
       audioRef.value = document.querySelector('audio');
+      audioRef.value.addEventListener('ended', restartAudio);
+    });
+
+    onUnmounted(() => {
+      audioRef.value.removeEventListener('ended', restartAudio);
     });
 
     const toggleMute = () => {
@@ -45,18 +57,19 @@ export default {
         audioRef.value.play().catch(e => {
           console.error('Playback failed.', e);
         });
-    }
-   };
-    
+      }
+    };
 
     return {
       audioRef,
       isMuted,
-      toggleMute    
+      toggleMute,
+      restartAudio  
     };
   },
 };
 </script>
+
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <!-- CSS -->
