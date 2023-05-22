@@ -26,7 +26,7 @@
 
 <!-- JS -->
 <script>
-import { ref, onMounted, onUnmounted } from 'vue';
+import { ref, onMounted } from 'vue';
 
 export default {
   name: 'CoverPage',
@@ -44,10 +44,6 @@ export default {
     onMounted(() => {
       audioRef.value = document.querySelector('audio');
       audioRef.value.addEventListener('ended', restartAudio);
-    });
-
-    onUnmounted(() => {
-      audioRef.value.removeEventListener('ended', restartAudio);
     });
 
     const toggleMute = () => {
