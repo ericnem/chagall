@@ -144,7 +144,7 @@ export default {
 .sound-button {
   background-color:transparent;
   border-color:transparent;
-  margin-left: 1250px;
+  margin-left: 97%;
   transition: all 0.5s ease;
   
 }
@@ -156,7 +156,7 @@ export default {
 }
 
 .sound-button:hover .fas {
-  transform: rotate(45deg);
+  transform: rotate(-30deg);
 }
 
 #coverImg {
