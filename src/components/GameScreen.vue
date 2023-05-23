@@ -22,7 +22,10 @@
     <div class="gamescreen">
       <div class="left">
         <img v-if="loadedImages[roundNum-1]" style="max-width: 100%; max-height: 100%; padding-left:5%" :src="state.images[roundNum-1]" :key="state.images[roundNum-1]">
-      </div> 
+            <div class="answer" v-if="showInfo && loadedImages[roundNum-1]">
+              <strong><p class="answer-text"><em>{{state.titles[roundNum-1]}}</em> - {{state.dates[roundNum-1]}}</p></strong>
+            </div>
+       </div>
       <div class="right">
         <div id="guessingbox">
           <p style = "font-size:25px;" id="guesstitle">GUESS</p>
@@ -54,7 +57,7 @@
 <!-- JS -->
 <script>
 import { fetchPaintings } from '../fetch.js';
-import { reactive, ref, onMounted, nextTick } from 'vue';
+import { reactive, ref, onMounted, nextTick, watch} from 'vue';
 import { pointDeduction } from '../score.js';
 import anime from 'animejs/lib/anime.es.js';
 
@@ -66,6 +69,7 @@ export default {
 
   setup() {
 
+    const loadNextImage = ref(false); 
     const loadedImages = reactive([false, false, false, false, false]);
     const roundNum = ref(1);
     const currentScore = ref(0);
@@ -75,10 +79,15 @@ export default {
     const age = ref(1);
     const startEra = ref(-500);
     const endEra = ref(2000);
+    const showInfo = ref(false);
 
     let tempScore = 0;
 
     const state = reactive({images:[], titles:[], artists:[], dates:[]});
+
+    watch(roundNum, () => {
+      showInfo.value = false;
+    });
 
     onMounted(() => {
       highScore.value = getHighScore() || 0; 
@@ -122,31 +131,41 @@ export default {
 
     function fillCircle() {
       tempScore = currentScore.value; // store current score in a temporary variable
-  
-      if (roundNum.value < 5) {
-       const answer = state.dates[roundNum.value - 1];
-       roundNum.value++;
-       currentScore.value += pointDeduction(guess.value, answer, startEra.value, endEra.value);
-     } else {
-       const answer = state.dates[roundNum.value - 1];
-       roundNum.value++;
-       currentScore.value += pointDeduction(guess.value, answer, startEra.value, endEra.value);
-       endOfGame(); 
+
+      const answer = state.dates[roundNum.value - 1];
+      currentScore.value += pointDeduction(guess.value, answer, startEra.value, endEra.value);
+      showInfo.value = true;
+
+      // Start loading the next image but dont show it immediately 
+      loadNextImage.value = true;
+
+      // Number animation
+      anime({
+         targets: currentScore,
+          value: [tempScore, currentScore.value],
+          round: 1,
+         easing: 'easeInOutExpo',
+       duration: 1000,
+         update: async function() {
+       await nextTick();
+        }
+     });
+
+  // Wait for the DOM to update and for some delay before advancing to the next round
+     nextTick()
+        .then(() => {
+          setTimeout(() => {
+        if (roundNum.value < 5) {
+          roundNum.value++;
+          showInfo.value = false;
+          loadNextImage.value = false; // Now the next image can be shown
+        } else {
+          endOfGame();
+          roundNum.value++;
+        }
+      }, 3000); // delay of 3 seconds
+    });
   }
-
-  // Number animation
-    anime({
-      targets: currentScore,
-      value: [tempScore, currentScore.value],
-      round: 1,
-      easing: 'easeInOutExpo',
-      duration: 1000,
-      update: async function() {
-        await nextTick(); 
-      }
-   });
-}
-
 
 
     fetchPaintings().then(data => {
@@ -178,7 +197,8 @@ export default {
       roundNum,
       currentScore,
       highScore,
-      loadedImages
+      loadedImages,
+      showInfo
     }
   }
 }
@@ -276,12 +296,13 @@ export default {
  bottom:0;
 }
 .left {
- display: flex;
- justify-content: center;
- align-items: center;
- height: 100%;
- width: 45%;
- float: left;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  height: 100%;
+  width: 45%;
+  float: left;
 }
 .right {
  height: 90%;
@@ -299,7 +320,6 @@ background-color:#F5F5F5;
 border-radius: 50%;
 display: inline-block;
 }
-
 
 .filled{
 background-color:gold;
