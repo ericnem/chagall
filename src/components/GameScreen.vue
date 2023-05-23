@@ -256,7 +256,8 @@ export default {
  border-radius:8px;
 }
 .header {
- padding-top: 4%;
+ padding-top: 2%;
+ padding-bottom: 2%;
  position: relative;
  display: flex;
  align-items:center;
