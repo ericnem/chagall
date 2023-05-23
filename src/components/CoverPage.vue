@@ -12,7 +12,7 @@
     <img id="coverImg" alt="chagall cover" :src="require('@/assets/cover_frame.png')" height="350">
     <br> 
     <br>
-    <p id="modeheader">Mode</p>
+    <i id="modeheader">Select era</i>
     <div class="modeselection">
       <button id="leftbutton" @click="changeMode(-1)"><i class="arrow left"></i></button>
       <p id="mode"> {{ modes[currentMode].name }} </p>
@@ -62,7 +62,7 @@ export default {
     function changeMode(direction) {
       if (this.currentMode > 0) {
         this.currentMode += direction;
-        this.currentMode = this.currentMode % 7;
+        this.currentMode = this.currentMode % 6;
       } else if (this.currentMode == 0 && direction == 1) {
         this.currentMode = 1;
       } else {
@@ -201,13 +201,15 @@ export default {
 
 #modeheader{
   font-family: Helvetica, sans-serif;
-  font-size: 20px;
+  color:#B0BDC1;
+  font-size: 14px;
   position: relative;
   animation: slideUp 1.55s ease-out forwards;
   margin: 0;
 }
 
 #mode{
+  color:black;
   font-family: Helvetica, sans-serif;
   font-size: 20px;
   font-weight: bold;
@@ -218,8 +220,11 @@ export default {
   padding-right: 1%;
   padding-top:0.5%;
   padding-bottom:0.5%;
-  border-radius: 50px;
+  border-radius: 7px;
   display: inline-block;
+  margin-bottom:1%;
+  margin-top:3px;
+  width: 140px;
 
 }
 
@@ -230,11 +235,12 @@ export default {
   font-family: Helvetica, sans-serif;
   font-weight: bold;
   font-size: 20px;
-  width: 160px;
-  height: 30px;
+  width: 170px;
+  height: 37px;
   border-radius: 7px;
   position: relative;
   animation: slideUp 1.55s ease-out forwards;
+  
 }
 
 @keyframes slideUp {
