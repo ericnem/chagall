@@ -21,9 +21,9 @@
     <button id="startbutton"  @click="$router.push({name: 'game'})">Start Game</button>
     <footer>
       <br>
-        <p style="margin:10px" id="footer"> 
-          made by <a href="https://www.linkedin.com/in/tal-cohen-kleinstein-515a12261/" target="_blank"> <strong>tcohenkl</strong></a>
-          <strong> and </strong><a href="https://www.linkedin.com/in/eric-nemrodov-44738b241/" target="_blank"><strong>ericnem</strong></a>
+        <p style="margin:50px" id="footer"> 
+          made by <a href="https://github.com/tcohenkl" target="_blank"> <strong>tcohenkl</strong></a>
+          <strong> and </strong><a href="https://github.com/ericnem" target="_blank"><strong>ericnem</strong></a>
         </p>
       <br>
     </footer>
@@ -163,6 +163,7 @@ export default {
   display:block;
   margin-left: auto;
   margin-right: auto;
+  margin-bottom: 2%;
   margin-top: 5%;
   position: relative;
   animation: flyIn 2.5s ease-out forwards;
@@ -180,7 +181,6 @@ export default {
 
 #footer {
   opacity: 0;
-  top: 30px;
   animation: fadeIn 4.75s ease-in forwards; 
 }
 
