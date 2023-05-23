@@ -1,11 +1,11 @@
 import axios from 'axios';
 import Art from './art.js';
 
-export const fetchPaintings = async () => {
+export const fetchPaintings = async (start, end) => {
   const artArr = [];
   let ids = [];
 
-  const res = await axios.get('https://collectionapi.metmuseum.org/public/collection/v1/search?hasImages=true&medium=Paintings&q=paintings');
+  const res = await axios.get('https://collectionapi.metmuseum.org/public/collection/v1/search?hasImages=true&medium=Paintings&dateBegin='+start+'&dateEnd='+end+'&q=paintings');
 
   if (res.data && res.data.objectIDs) {
     ids = res.data.objectIDs;

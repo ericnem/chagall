@@ -41,13 +41,6 @@ export default {
     const audioRef = ref(null); //initially points to nothing
     const isMuted = ref(true);
 
-    function setMode(){
-      if (localStorage.getItem('mode') == false) {
-        localStorage.setItem('mode', JSON.stringify(modes[0]));
-      }
-    }
-    
-    setMode();
     function makeModes(){
       const all = new Mode("All",-500,2000,0);
       const ancient = new Mode("Classical",-500,500,0);
@@ -55,14 +48,16 @@ export default {
       const renaissance = new Mode("Renaissance",1300,1600,0);
       const emodern = new Mode("Early Modern",1600,1800,0);
       const lmodern = new Mode("Late Modern",1800,1950,0);
-      const contemp = new Mode("Contemporary",1950, 2000, 0)
 
-      return [all, ancient, medieval, renaissance, emodern, lmodern, contemp];
+      return [all, ancient, medieval, renaissance, emodern, lmodern];
     }
 
     const modes = reactive(makeModes())
+    const currentMode = ref(0);
 
-    const currentMode = ref(0)
+    localStorage.setItem('mode', JSON.stringify(modes[0]));
+
+    // const currentMode = ref(localStorage.getItem('currentMode'))
 
     function changeMode(direction) {
       if (this.currentMode > 0) {
@@ -75,7 +70,7 @@ export default {
       }
       // localStorage.setItem('mode', JSON.stringify(this.modes[currentMode]));
       localStorage.setItem('mode', JSON.stringify(modes[this.currentMode]))
-      console.log(localStorage.getItem('mode'));
+      // localStorage.setItem('currentMode', this.currentMode)
     }
 
     const restartAudio = () => {
