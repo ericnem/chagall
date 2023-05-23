@@ -4,7 +4,14 @@ import GameScreen from './components/GameScreen.vue'
 
 const routes = [
   { path: '/', component: CoverPage },
-  { path: '/game', component: GameScreen }
+  { path: '/game',
+    name: 'game', 
+    component: GameScreen,
+    props : { startEra: 0, endEra: 0},
+    meta: {
+      auth: true
+    } 
+  }
    
 ]
 

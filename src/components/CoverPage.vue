@@ -6,33 +6,68 @@
       <source :src="require('@/assets/cover_audio.mp3')" type="audio/mpeg">
     </audio>
     <button class="sound-button" @click="toggleMute">
-    <i class="fas fa-volume-up" v-if="!isMuted"></i>
-    <i class="fas fa-volume-mute" v-else></i>
+      <i class="fas fa-volume-up" v-if="!isMuted"></i>
+      <i class="fas fa-volume-mute" v-else></i>
     </button>
-      <img id="coverImg" alt="chagall cover" :src="require('@/assets/cover_frame.png')" width="225" height="295">
-        <br> 
-          <br>
-            <button id="startbutton"  @click="$router.push('/game')">Start Game</button>
-              <footer>
-               <br>
-                 <p id="footer"> 
-                  made by <a href="https://www.linkedin.com/in/tal-cohen-kleinstein-515a12261/" target="_blank"> <strong>tcohenkl</strong></a>
-                  <strong> and </strong><a href="https://www.linkedin.com/in/eric-nemrodov-44738b241/" target="_blank"><strong>ericnem</strong></a>
-                </p>
-              <br>
-           </footer>
+    <img id="coverImg" alt="chagall cover" :src="require('@/assets/cover_frame.png')" height="350">
+    <br> 
+    <br>
+    <p id="modeheader">Mode</p>
+    <div class="modeselection">
+      <button id="leftbutton" @click="changeMode(-1)"><i class="arrow left"></i></button>
+      <p id="mode"> {{ modes[currentMode].name }} </p>
+      <button id="rightbutton" @click="changeMode(1)"><i class="arrow right"></i></button>
     </div>
+    <button id="startbutton"  @click="$router.push({name: 'game'})">Start Game</button>
+    <footer>
+      <br>
+        <p style="margin:10px" id="footer"> 
+          made by <a href="https://www.linkedin.com/in/tal-cohen-kleinstein-515a12261/" target="_blank"> <strong>tcohenkl</strong></a>
+          <strong> and </strong><a href="https://www.linkedin.com/in/eric-nemrodov-44738b241/" target="_blank"><strong>ericnem</strong></a>
+        </p>
+      <br>
+    </footer>
+  </div>
 </template>
 
 <!-- JS -->
 <script>
-import { ref, onMounted } from 'vue';
+import { ref, reactive, onMounted } from 'vue';
+import Mode from '../mode.js'
 
 export default {
   name: 'CoverPage',
   setup() {
     const audioRef = ref(null); //initially points to nothing
     const isMuted = ref(true);
+
+    function makeModes(){
+      const all = new Mode("All",-500,2000,0);
+      const ancient = new Mode("Classical",-500,500,0);
+      const medieval = new Mode("Medieval",500,1300,0);
+      const renaissance = new Mode("Renaissance",1300,1600,0);
+      const emodern = new Mode("Early Modern",1600,1800,0);
+      const lmodern = new Mode("Late Modern",1800,1950,0);
+      const contemp = new Mode("Contemporary",1950, 2000, 0)
+
+      return [all, ancient, medieval, renaissance, emodern, lmodern, contemp];
+    }
+
+    const modes = reactive(makeModes())
+
+    const currentMode = ref(0)
+
+    function changeMode(direction) {
+      if (this.currentMode > 0) {
+        this.currentMode += direction;
+        this.currentMode = this.currentMode % 7;
+      } else if (this.currentMode == 0 && direction == 1) {
+        this.currentMode = 1;
+      } else {
+        this.currentMode = 6;
+      }
+
+    }
 
     const restartAudio = () => {
       audioRef.value.currentTime = 0;
@@ -58,6 +93,9 @@ export default {
 
     return {
       audioRef,
+      modes,
+      currentMode,
+      changeMode,
       isMuted,
       toggleMute,
       restartAudio  
@@ -71,11 +109,40 @@ export default {
 <!-- CSS -->
 <style scoped>
 
+#rightbutton {
+  background-color: transparent;
+  border: none;
+  outline: none;
+}
+#leftbutton {
+  background-color: transparent;
+  border: none;
+  outline: none;
+}
+.arrow {
+  border: solid black;
+  border-width: 0 3px 3px 0;
+  display: inline-block;
+  padding: 3px;
+  position: relative;
+  animation: slideUp 1.55s ease-out forwards;
+  
+}
+
+.right {
+  transform: rotate(-45deg);
+  -webkit-transform: rotate(-45deg);
+}
+.left{
+  transform: rotate(135deg);
+  -webkit-transform: rotate(135deg);
+}
 .sound-button {
   background-color:transparent;
   border-color:transparent;
   margin-left: 1250px;
   transition: all 0.5s ease;
+  
 }
 
 .sound-button .fas {
@@ -92,9 +159,8 @@ export default {
   display:block;
   margin-left: auto;
   margin-right: auto;
-  margin-top: 175px;
+  margin-top: 5%;
   position: relative;
-  top: -200px;
   animation: flyIn 2.5s ease-out forwards;
 }
 
@@ -121,6 +187,36 @@ export default {
   100% {
     opacity: 1; 
   }
+}
+
+.modeselection{
+  height:5%;
+  justify-content: center;
+  align-items: center;
+}
+
+#modeheader{
+  font-family: Helvetica, sans-serif;
+  font-size: 20px;
+  position: relative;
+  animation: slideUp 1.55s ease-out forwards;
+  margin: 0;
+}
+
+#mode{
+  font-family: Helvetica, sans-serif;
+  font-size: 20px;
+  font-weight: bold;
+  position: relative;
+  animation: slideUp 1.55s ease-out forwards;
+  background-color: #B6CCD7;
+  padding-left:1%;
+  padding-right: 1%;
+  padding-top:0.5%;
+  padding-bottom:0.5%;
+  border-radius: 50px;
+  display: inline-block;
+
 }
 
 #startbutton {

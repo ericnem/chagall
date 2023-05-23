@@ -65,6 +65,7 @@ export default {
   },
 
   setup() {
+
     const loadedImages = reactive([false, false, false, false, false]);
     const roundNum = ref(1);
     const currentScore = ref(0);
