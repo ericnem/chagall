@@ -66,7 +66,7 @@ export default {
       } else if (this.currentMode == 0 && direction == 1) {
         this.currentMode = 1;
       } else {
-        this.currentMode = 6;
+        this.currentMode = 5;
       }
       // localStorage.setItem('mode', JSON.stringify(this.modes[currentMode]));
       localStorage.setItem('mode', JSON.stringify(modes[this.currentMode]))
