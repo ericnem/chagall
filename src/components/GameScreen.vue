@@ -68,17 +68,17 @@ export default {
   },
 
   setup() {
-
+    const mode = JSON.parse(localStorage.getItem('mode'));
     const loadNextImage = ref(false); 
     const loadedImages = reactive([false, false, false, false, false]);
     const roundNum = ref(1);
     const currentScore = ref(0);
     const highScore = ref(0);
-    const guess = ref(1);
-    const guessabs = ref(1);
     const age = ref(1);
-    const startEra = ref(-500);
-    const endEra = ref(2000);
+    const startEra = ref(mode.startDate);
+    const endEra = ref(mode.endDate);
+    const guess = ref(Math.floor((endEra.value+startEra.value)/2));
+    const guessabs = ref(Math.abs(guess.value));
     const showInfo = ref(false);
 
     let tempScore = 0;
@@ -168,7 +168,8 @@ export default {
   }
 
 
-    fetchPaintings().then(data => {
+
+    fetchPaintings(startEra.value, endEra.value).then(data => {
     for (let i = 0; i < 5; i++) {
       state.images.push(data[i].image);
       state.titles.push(data[i].title);
@@ -276,7 +277,8 @@ export default {
  border-radius:8px;
 }
 .header {
- padding-top: 4%;
+ padding-top: 2%;
+ padding-bottom: 2%;
  position: relative;
  display: flex;
  align-items:center;
