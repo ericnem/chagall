@@ -7,10 +7,6 @@ const routes = [
   { path: '/game',
     name: 'game', 
     component: GameScreen,
-    props : { startEra: 0, endEra: 0},
-    meta: {
-      auth: true
-    } 
   }
    
 ]

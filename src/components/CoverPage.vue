@@ -41,6 +41,13 @@ export default {
     const audioRef = ref(null); //initially points to nothing
     const isMuted = ref(true);
 
+    function setMode(){
+      if (localStorage.getItem('mode') == false) {
+        localStorage.setItem('mode', JSON.stringify(modes[0]));
+      }
+    }
+    
+    setMode();
     function makeModes(){
       const all = new Mode("All",-500,2000,0);
       const ancient = new Mode("Classical",-500,500,0);
@@ -66,7 +73,9 @@ export default {
       } else {
         this.currentMode = 6;
       }
-
+      // localStorage.setItem('mode', JSON.stringify(this.modes[currentMode]));
+      localStorage.setItem('mode', JSON.stringify(modes[this.currentMode]))
+      console.log(localStorage.getItem('mode'));
     }
 
     const restartAudio = () => {
