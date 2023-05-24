@@ -1,11 +1,19 @@
 import axios from 'axios';
 import Art from './art.js';
 
+// fetchPaintings(start,end) takes the start and end years of an era and returns
+//   an array of 5 random non-repeating Art objects from the MET API
+// requires: axios, Art class
+// *         start < end
+// effects: makes http GET request
 export const fetchPaintings = async (start, end) => {
   const artArr = [];
   let ids = [];
 
-  const res = await axios.get('https://collectionapi.metmuseum.org/public/collection/v1/search?hasImages=true&medium=Paintings&dateBegin='+start+'&dateEnd='+end+'&q=paintings');
+  const res = await axios.get(
+    'https://collectionapi.metmuseum.org/public/collection/v1\
+    /search?hasImages=true&medium=Paintings&dateBegin='+start+'&dateEnd='
+    +end+'&q=paintings');
 
   if (res.data && res.data.objectIDs) {
     ids = res.data.objectIDs;

@@ -7,5 +7,3 @@ export default class Art {
       this.artist = artist;
     }
   }
-
-  

@@ -1,33 +1,47 @@
 <!-- HTML -->
 <template>
+  <html lang="en-us"> </html>
   <div class="coverpage">
-    <head><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"></head>
-    <audio ref="audioRef" autoplay muted>
-      <source :src="require('@/assets/cover_audio.mp3')" type="audio/mpeg">
-    </audio>
-    <button class="sound-button" @click="toggleMute">
-      <i class="fas fa-volume-up" v-if="!isMuted"></i>
-      <i class="fas fa-volume-mute" v-else></i>
-    </button>
-    <img id="coverImg" alt="chagall cover" :src="require('@/assets/cover_frame.png')" height="350">
-    <br> 
-    <br>
-    <i id="modeheader">Select era</i>
-    <div class="modeselection">
-      <button id="leftbutton" @click="changeMode(-1)"><i class="arrow left"></i></button>
-      <p id="mode"> {{ modes[currentMode].name }} </p>
-      <button id="rightbutton" @click="changeMode(1)"><i class="arrow right"></i></button>
-    </div>
-    <button id="startbutton"  @click="$router.push({name: 'game'})">Start Game</button>
+
+    <head>
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    </head>
+
+    <body>
+      <audio ref="audioRef" autoplay muted>
+        <source :src="require('@/assets/cover_audio.mp3')" type="audio/mpeg">
+      </audio>
+
+      <button class="sound-button" @click="toggleMute">
+        <i class="fas fa-volume-up" v-if="!isMuted"></i>
+        <i class="fas fa-volume-mute" v-else></i>
+      </button>
+
+      <img src="@/assets/cover_frame.png" id="coverImg" alt="chagall cover" height="350">
+      <br> 
+      <br>
+      <i id="modeheader">Select era</i>
+
+      <div class="modeselection">
+        <button id="leftbutton" @click="changeMode(-1)"><i class="arrow left"></i></button>
+        <p id="mode"> {{ modes[currentMode].name }} </p>
+        <button id="rightbutton" @click="changeMode(1)"><i class="arrow right"></i></button>
+      </div>
+
+      <button id="startbutton"  @click="$router.push({name: 'game'})">Start Game</button>
+    </body>
+
     <footer>
       <br>
-        <p style="margin:50px" id="footer"> 
-          made by <a href="https://github.com/tcohenkl" target="_blank"> <strong>tcohenkl</strong></a>
-          <strong> and </strong><a href="https://github.com/ericnem" target="_blank"><strong>ericnem</strong></a>
-        </p>
+      <p style="margin:50px" id="footer"> 
+        made by <a href="https://github.com/tcohenkl" target="_blank"> <strong>tcohenkl</strong></a>
+        <strong> and </strong><a href="https://github.com/ericnem" target="_blank"><strong>ericnem</strong></a>
+      </p>
       <br>
     </footer>
+
   </div>
+
 </template>
 
 <!-- JS -->
@@ -41,7 +55,8 @@ export default {
     const audioRef = ref(null); //initially points to nothing
     const isMuted = ref(true);
 
-    function makeModes(){
+    // makeModes() returns a list of Mode objects
+    function makeModes() {
       const all = new Mode("All",-500,2000,0);
       const ancient = new Mode("Classical",-500,500,0);
       const medieval = new Mode("Medieval",500,1300,0);
@@ -57,8 +72,8 @@ export default {
 
     localStorage.setItem('mode', JSON.stringify(modes[0]));
 
-    // const currentMode = ref(localStorage.getItem('currentMode'))
-
+    // changeMode(direction) cycles through modes depending on direction
+    // requires: direction == 1 || direciton == -1 
     function changeMode(direction) {
       if (this.currentMode > 0) {
         this.currentMode += direction;
@@ -68,9 +83,7 @@ export default {
       } else {
         this.currentMode = 5;
       }
-      // localStorage.setItem('mode', JSON.stringify(this.modes[currentMode]));
       localStorage.setItem('mode', JSON.stringify(modes[this.currentMode]))
-      // localStorage.setItem('currentMode', this.currentMode)
     }
 
     const restartAudio = () => {
@@ -108,8 +121,6 @@ export default {
 };
 </script>
 
-
-<!-- Add "scoped" attribute to limit CSS to this component only -->
 <!-- CSS -->
 <style scoped>
 
@@ -118,11 +129,13 @@ export default {
   border: none;
   outline: none;
 }
+
 #leftbutton {
   background-color: transparent;
   border: none;
   outline: none;
 }
+
 .arrow {
   border: solid black;
   border-width: 0 3px 3px 0;
@@ -141,6 +154,7 @@ export default {
   transform: rotate(135deg);
   -webkit-transform: rotate(135deg);
 }
+
 .sound-button {
   background-color:transparent;
   border-color:transparent;
@@ -177,7 +191,6 @@ export default {
     top: 0;
   }
 }
-
 
 #footer {
   opacity: 0;
@@ -216,16 +229,12 @@ export default {
   position: relative;
   animation: slideUp 1.55s ease-out forwards;
   background-color: #B6CCD7;
-  padding-left:1%;
-  padding-right: 1%;
-  padding-top:0.5%;
-  padding-bottom:0.5%;
   border-radius: 7px;
   display: inline-block;
-  margin-bottom:1%;
-  margin-top:3px;
-  width: 140px;
-
+  margin: 3px 0px 10px 0px;
+  padding: 8px 0 2px 0;
+  width: 170px;
+  height: 30px;
 }
 
 #startbutton {

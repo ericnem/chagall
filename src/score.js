@@ -1,5 +1,7 @@
 
-// pointDeduction(guessed,startDate,endDate,startEra,endEra) 
+// pointDeduction(guessed,startDate,endDate,startEra,endEra) returns a score
+//   between 0 and 1000 based on the player's guess, the correct answer, adjusting
+//   for the year range.
 // requires: guessed >= startEra && guessed <= endEra 
 // *         startEra <= endEra
 // *         startDate <= endDate
