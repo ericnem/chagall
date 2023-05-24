@@ -10,6 +10,8 @@ Guess the year of thousands of artworks from the MET Museum's Database. Test you
 
 
 ## Project setup
+
+This
 ```
 npm install
 ```
@@ -31,3 +33,9 @@ npm run lint
 
 ### Customize configuration
 See [Configuration Reference](https://cli.vuejs.org/config/).
+
+## Relfection
+
+This was a 3 week project made with @tcohenkl to learn web application development and familiarize myself with using APIs. Originally this project used the Harvard Art Museums API, but due to poor tagging we switched to the MET Museum's API, which we would definitely recommend for any art projects. 
+
+All in all, this project uses the axios and anime libraries, Vue3 and everything that it uses: JS, HTML and CSS.
