@@ -21,14 +21,14 @@
     </div>
     <div class="gamescreen">
       <div class="left">
-        <img v-if="loadedImages[roundNum-1]" style="max-width: 100%; max-height: 100%; padding-left:5%" :src="state.images[roundNum-1]" :key="state.images[roundNum-1]">
+        <img v-if="loadedImages[roundNum-1]" style="max-width: 100%; max-height: 90%; padding-left:5%" :src="state.images[roundNum-1]" :key="state.images[roundNum-1]">
             <div class="answer" v-if="showInfo && loadedImages[roundNum-1]">
-              <strong><p class="answer-text"><em>{{state.titles[roundNum-1]}}</em> - <em>{{state.artists[roundNum-1]}}</em></p></strong>
+              <strong><p class="answer-text"> <em>{{state.titles[roundNum-1]}}</em> <span v-if="state.artists[roundNum - 1] && state.artists[roundNum - 1].length > 0">-</span> {{state.artists[roundNum-1]}}</p> </strong>
             </div>
        </div>
       <div class="right">
-        <div id="guessingbox">
-          <p style = "font-size:25px;" id="guesstitle">GUESS</p>
+          <div id="guessingbox" v-if="!showInfo">
+            <p style = "font-size:25px;" id="guesstitle">GUESS</p>
           <div id="container">
             <input v-model= "guessabs" @input="guess= guessabs*age" style = "padding: 7px 0px 7px 0px" id="guess" type="number" min="1" max="9999" required>
             <select v-model="age" @change="guess = guessabs*age" name="age" id="age" required>
@@ -37,27 +37,36 @@
             </select>
           </div>
         </div>
-        <div class="sliderlabels">
+        <div class="sliderlabels" v-if="!showInfo">
           <b style="float:left">{{makeLabel(startEra)}}</b>
           <b style="float:right">{{makeLabel(endEra)}}</b>
         </div>
-        
-        <div class="slidecontainer">
+        <div class="slidecontainer" v-if="!showInfo">
           <input v-model="guess" @input="updateAge" type="range" v-bind:min= "startEra" v-bind:max="endEra" class="slider" id="myRange">
         </div>
-        <i style = "color:#B0BDC1">Drag the slider or type your answer</i>
-        <br>
-        <br>
-        <button id="confirms" @click="fillCircle">Confirm</button>
+        <i v-if="!showInfo" style = "color:#B0BDC1">Drag the slider or type your answer</i>
+          <br>
+          <br>
+        <button id="confirms" @click="showAnswer" v-if="!showInfo">Confirm</button>
+      <!-- Interlude Screen  -->
+        <div class="interlude" v-if="showInfo">    
+          <h1> Guess: {{guess}}</h1>
+          <div id="correctAnswer"><h1>Answer: {{state.dates[roundNum-1]}}</h1></div>
+          <div id="margin"> <h1>Margin: {{ Math.abs(state.dates[roundNum-1] - guess) }}</h1></div>
+          <div id="points"> <h1>Points: {{ currentRoundPoints }}</h1></div>
+          <button id="next" @click="nextRound"  v-if="roundNum < 5">Next</button>
+          <button id="restart" @click="restartGame" v-if="roundNum >= 5">Play Again</button>
+          <button id="back" @click="$router.push('/')" v-if="roundNum >= 5">Menu</button>        
+        </div>
+      </div>
       </div>
     </div>
-  </div>
  </template>
 
 <!-- JS -->
 <script>
 import { fetchPaintings } from '../fetch.js';
-import { reactive, ref, onMounted, nextTick, watch} from 'vue';
+import { reactive, ref, onMounted, nextTick} from 'vue';
 import { pointDeduction } from '../score.js';
 import anime from 'animejs/lib/anime.es.js';
 
@@ -69,7 +78,6 @@ export default {
 
   setup() {
     const mode = JSON.parse(localStorage.getItem('mode'));
-    const loadNextImage = ref(false); 
     const loadedImages = reactive([false, false, false, false, false]);
     const roundNum = ref(1);
     const currentScore = ref(0);
@@ -80,19 +88,17 @@ export default {
     const guess = ref(Math.floor((endEra.value+startEra.value)/2));
     const guessabs = ref(Math.abs(guess.value));
     const showInfo = ref(false);
-
+    const currentRoundPoints = ref(0);
+    
     let tempScore = 0;
 
     const state = reactive({images:[], titles:[], artists:[], dates:[]});
-
-    watch(roundNum, () => {
-      showInfo.value = false;
-    });
 
     onMounted(() => {
       highScore.value = getHighScore() || 0; 
     });
 
+    
     function makeLabel(year) {
       let label = (Math.abs(year)).toString();
       if (year < 0) {
@@ -129,44 +135,41 @@ export default {
       }
     } 
 
-    function fillCircle() {
-      tempScore = currentScore.value; // store current score in a temporary variable
-
-      const answer = state.dates[roundNum.value - 1];
-      currentScore.value += pointDeduction(guess.value, answer, startEra.value, endEra.value);
+    function showAnswer() {
       showInfo.value = true;
 
-      // Start loading the next image but dont show it immediately 
-      loadNextImage.value = true;
+      tempScore = currentScore.value;
+      const answer = state.dates[roundNum.value - 1];
+      const points = pointDeduction(guess.value, answer, startEra.value, endEra.value);
+      currentRoundPoints.value = points;
+      currentScore.value += points;
 
-      // Number animation
+    
       anime({
-         targets: currentScore,
-          value: [tempScore, currentScore.value],
-          round: 1,
-         easing: 'easeInOutExpo',
-       duration: 1000,
-         update: async function() {
-       await nextTick();
-        }
-     });
-
-  // Wait for the DOM to update and for some delay before advancing to the next round
-     nextTick()
-        .then(() => {
-          setTimeout(() => {
-        if (roundNum.value < 5) {
-          roundNum.value++;
-          showInfo.value = false;
-          loadNextImage.value = false; // Now the next image can be shown
-        } else {
-          endOfGame();
-          roundNum.value++;
-        }
-      }, 3000); // delay of 3 seconds
-    });
+      targets: currentScore,
+      value: [tempScore, currentScore.value],
+      round: 1,
+      easing: 'easeInOutExpo',
+      duration: 1000,
+      update: async function() {
+        await nextTick();
+      }
+    }); 
+    
   }
 
+
+    function nextRound() {
+
+      if (roundNum.value < 5) {
+        roundNum.value++;
+      } else {
+        endOfGame();
+        roundNum.value++; 
+      }
+  
+      showInfo.value = false;
+   }
 
 
     fetchPaintings(startEra.value, endEra.value).then(data => {
@@ -184,6 +187,40 @@ export default {
     })
   .catch(err => console.log(err));
 
+
+  function restartGame() {
+    roundNum.value = 1;
+    currentScore.value = 0;
+    highScore.value = getHighScore() || 0;
+    age.value = 1;
+    startEra.value = mode.startDate;
+    endEra.value = mode.endDate;
+    guess.value = Math.floor((endEra.value+startEra.value)/2);
+    guessabs.value = Math.abs(guess.value);
+    showInfo.value = false;
+    currentRoundPoints.value = 0;
+    state.images = [];
+    state.titles = [];
+    state.artists = [];
+    state.dates = [];
+
+    fetchPaintings(startEra.value, endEra.value)
+    .then(data => {
+        for (let i = 0; i < 5; i++) {
+            state.images.push(data[i].image);
+            state.titles.push(data[i].title);
+            state.artists.push(data[i].artist);
+            state.dates.push(data[i].dateEnd);
+            
+            const img = new Image(); 
+            img.onload = () => { loadedImages[i] = true }; // when the image has loaded, set the loadedImages index to true
+            img.src = data[i].image; // set the source of the image
+        }
+    })
+    .catch(err => console.log(err));
+}
+
+
     return {
       state,
       guess,
@@ -191,7 +228,7 @@ export default {
       age,
       startEra,
       endEra,
-      fillCircle,
+      nextRound,
       makeLabel,
       endOfGame,
       updateAge,
@@ -199,7 +236,10 @@ export default {
       currentScore,
       highScore,
       loadedImages,
-      showInfo
+      showInfo,
+      showAnswer,
+      currentRoundPoints,
+      restartGame,
     }
   }
 }
@@ -300,7 +340,7 @@ export default {
 .left {
   display: flex;
   flex-direction: column;
-  justify-content: flex-start;
+  justify-content: center;
   align-items: center;
   height: 100%;
   width: 45%;
@@ -377,7 +417,7 @@ margin-left:auto;
 margin-right:auto;
 margin-top:10%;
 width:20%;
-height:23%;
+height:25%;
 border: 4px solid black;
 border-radius:30px;
 }
@@ -401,4 +441,8 @@ margin-top: 5%;
 background-color: #b99225;
 border: #b99225;
 }
+
+
+
+
 </style>
