@@ -86,6 +86,7 @@ export default {
       localStorage.setItem('mode', JSON.stringify(modes[this.currentMode]))
     }
 
+    // restartAudio() restarts the cover page audio when it finishes
     const restartAudio = () => {
       audioRef.value.currentTime = 0;
       audioRef.value.play().catch(e => {
@@ -98,6 +99,7 @@ export default {
       audioRef.value.addEventListener('ended', restartAudio);
     });
 
+    // toggleMute() turns the cover audio on/off 
     const toggleMute = () => {
       isMuted.value = !isMuted.value;
       audioRef.value.muted = isMuted.value;
