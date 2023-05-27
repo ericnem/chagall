@@ -34,7 +34,7 @@ npm run build
 npm run lint
 ```
 
-## Relfection
+## Reflection
 
 This was a 3 week project made with @tcohenkl to learn web application development and familiarize myself with using APIs. Originally this project used the Harvard Art Museums API, but due to poor tagging we switched to the MET Museum's API, which we would definitely recommend for any art projects. 
 
