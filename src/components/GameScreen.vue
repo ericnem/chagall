@@ -213,8 +213,8 @@ export default {
             state.dates.push(data[i].dateEnd);
             
             const img = new Image(); 
-            img.onload = () => { loadedImages[i] = true }; // when the image has loaded, set the loadedImages index to true
-            img.src = data[i].image; // set the source of the image
+            img.onload = () => { loadedImages[i] = true }; 
+            img.src = data[i].image; 
         }
     })
     .catch(err => console.log(err));
