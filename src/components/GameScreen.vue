@@ -27,9 +27,9 @@
             </div>
        </div>
       <div class="right">
-          <div id="guessingbox" v-if="!showInfo">
-            <p style = "font-size:25px;" id="guesstitle">GUESS</p>
-          <div id="container">
+          <div class="guessingbox" v-if="!showInfo">
+            <p class="boxtitle">GUESS</p>
+          <div class="container">
             <input v-model= "guessabs" @input="guess= guessabs*age" style = "padding: 7px 0px 7px 0px" id="guess" type="number" min="1" max="9999" required>
             <select v-model="age" @change="guess = guessabs*age" name="age" id="age" required>
               <option value=1>A.D</option>
@@ -49,11 +49,32 @@
           <br>
         <button id="confirms" @click="showAnswer" v-if="!showInfo">Confirm</button>
       <!-- Interlude Screen  -->
-        <div class="interlude" v-if="showInfo">    
-          <h1> Guess: {{guess}}</h1>
-          <div id="correctAnswer"><h1>Answer: {{state.dates[roundNum-1]}}</h1></div>
-          <div id="margin"> <h1>Margin: {{ Math.abs(state.dates[roundNum-1] - guess) }}</h1></div>
-          <div id="points"> <h1>Points: {{ currentRoundPoints }}</h1></div>
+        <div class="interlude" v-if="showInfo">
+          <div class="finalboxes" style="margin-bottom:5%;">
+            <div class="guessingbox" style="float:left; width:40%; height:100%;margin-top:0%;">
+              <p class="boxtitle"> GUESS</p>
+              <p style="background-color:#F5F5F5; font-size:20px; 
+              margin:5px 15% 0px 15%; width: 70%;
+              padding:7px 0px 7px 0px">{{ makeLabel(guess) }}</p>
+            </div>
+            <div class="guessingbox" style="border-color:gold;float:right; width:40%; height:100%; margin-top:0%;">
+              <p class="boxtitle"> ANSWER</p>
+              <p style="background-color:#F5F5F5; font-size:20px; 
+              margin:5px 15% 0px 15%; width: 70%;
+              padding:7px 0px 7px 0px">{{ makeLabel(state.dates[roundNum-1]) }}</p>
+            </div>
+          </div>
+          <br>
+          <div class="finalboxes" style="width:40%;height:auto;margin-bottom:2%;">
+            <p style="float:left;font-size:30px;font-weight: bold;margin-bottom:0px">Margin</p>
+            <p style="float:right;background-color: #F2D7D7;font-size:20px; width:25%; padding:7px 0px 7px 0px; margin:25px 0px 0px 0px"> {{ Math.abs(state.dates[roundNum-1] - guess) }} </p>
+          </div>   
+          <br>
+          <div class="finalboxes" style="width:40%;height:auto;">
+            <p style="float:left;font-size:30px;font-weight: bold; margin-top:10px">Points</p>
+            <p style="float:right;background-color: #B1D8B7;font-size:20px;width:25%; padding:7px 0px 7px 0px; margin:5px 0px 0px 0px"> {{ currentRoundPoints }} </p>
+          </div> 
+          <br>   
           <button id="next" @click="nextRound"  v-if="roundNum < 5">Next</button>
           <button id="restart" @click="restartGame" v-if="roundNum >= 5">Play Again</button>
           <button id="back" @click="$router.push('/')" v-if="roundNum >= 5">Menu</button>        
@@ -249,6 +270,72 @@ export default {
 <!-- CSS -->
 <style scoped>
 
+.interlude{
+  height:100%;
+  justify-content: center;
+  align-items: center;
+}
+#back{
+font-size:25px;
+color: black;
+background-color:#B0BDC1;
+border: gold;
+font-family: Helvetica,sans-serif;
+font-size: 30px;
+width: 25%;
+height: 10%;
+border-radius: 8px;
+margin: 5% 2% 0% 2%;
+}
+#back:hover{
+background-color: #8f9a9d;
+border: #8f9a9d;
+}
+#restart{
+  font-size:25px;
+color: black;
+background-color: gold;
+border: gold;
+font-family: Helvetica,sans-serif;
+font-size: 30px;
+width: 25%;
+height: 10%;
+border-radius: 8px;
+margin: 5% 2% 0% 2%;
+}
+#restart:hover{
+background-color: #b99225;
+border: #b99225;
+}
+#next {
+font-size:25px;
+color: black;
+background-color: gold;
+border: gold;
+font-family: Helvetica,sans-serif;
+font-size: 30px;
+width: 25%;
+height: 10%;
+border-radius: 8px;
+margin: 5%;
+}
+#next:hover{
+background-color: #b99225;
+border: #b99225;
+}
+.finalboxes {
+  display: inline-block;
+  position: relative;
+  width:50%;
+  height:23%;
+  justify-content: center;
+  align-items: center;
+  margin:0px;
+  animation: fadeIn 3s;
+}
+.finalguess {
+  border-color:black;
+}
 .sliderlabels {
   width:90%;
   display: inline-block;
@@ -368,14 +455,15 @@ background-color:gold;
 }
 
 
-#guesstitle{
+.boxtitle{
 font-family:Helvetica, sans-serif;
 font-weight:bold; 
 margin-bottom:8px;
+font-size:25px;
 }
 
 
-#container{
+.container{
 align-items:center;
 }
 
@@ -411,7 +499,7 @@ padding-bottom:8px;
 }
 
 
-#guessingbox {
+.guessingbox {
 font-family: Helvertica,sans-serif;
 margin-left:auto;
 margin-right:auto;
@@ -422,13 +510,22 @@ border: 4px solid black;
 border-radius:30px;
 }
 
+@keyframes fadeIn {
+  0% { opacity: 0; }
+  100% { opacity: 1; }
+}
+
+@keyframes fadeIn2 {
+  0% { opacity: 0; }
+  100% { opacity: 1; }
+}
+
 
 #confirms {
 color: black;
 background-color: gold;
 border: gold;
 font-family: Helvetica,sans-serif;
-font-weight:bold;
 font-size: 30px;
 width: 25%;
 height: 10%;
