@@ -23,7 +23,7 @@
       <div class="left">
         <img v-if="loadedImages[roundNum-1]" style="max-width: 100%; max-height: 90%; padding-left:5%" :src="state.images[roundNum-1]" :key="state.images[roundNum-1]">
             <div class="answer" v-if="showInfo && loadedImages[roundNum-1]">
-              <strong><p class="answer-text"> <em>{{state.titles[roundNum-1]}}</em> <span v-if="state.artists[roundNum - 1] && state.artists[roundNum - 1].length > 0">-</span> {{state.artists[roundNum-1]}}</p> </strong>
+              <h2><strong><p class="answer-text"> <em>{{state.titles[roundNum-1]}}</em> <span v-if="state.artists[roundNum - 1] && state.artists[roundNum - 1].length > 0">-</span> {{state.artists[roundNum-1]}}</p></strong></h2>
             </div>
        </div>
       <div class="right">
@@ -538,8 +538,5 @@ margin-top: 5%;
 background-color: #b99225;
 border: #b99225;
 }
-
-
-
 
 </style>
