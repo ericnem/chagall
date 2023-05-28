@@ -119,7 +119,7 @@ export default {
       highScore.value = getHighScore() || 0; 
     });
 
-    
+    //makeLabel(year) appends A.D if the year is greater than zero, and 'B.C' otherwise.
     function makeLabel(year) {
       let label = (Math.abs(year)).toString();
       if (year < 0) {
@@ -141,6 +141,7 @@ export default {
       }
     }
 
+        
     function getHighScore(){
       return parseInt(localStorage.getItem('highScore'), 10);
     }
