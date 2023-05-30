@@ -165,7 +165,10 @@ export default {
       currentRoundPoints.value = points;
       currentScore.value += points;
 
-    
+      if (roundNum.value == 5) {
+        endOfGame();
+      }
+
       anime({
       targets: currentScore,
       value: [tempScore, currentScore.value],
@@ -185,7 +188,6 @@ export default {
       if (roundNum.value < 5) {
         roundNum.value++;
       } else {
-        endOfGame();
         roundNum.value++; 
       }
   
