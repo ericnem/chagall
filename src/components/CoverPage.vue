@@ -75,6 +75,7 @@ export default {
     // changeMode(direction) cycles through modes depending on direction
     // requires: direction == 1 || direciton == -1 
     function changeMode(direction) {
+      
       if (this.currentMode > 0) {
         this.currentMode += direction;
         this.currentMode = this.currentMode % 6;
