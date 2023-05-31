@@ -8,6 +8,9 @@ Guess the year of thousands of artworks from the MET Museum's Database. Test you
 
 <img width="1440" alt="image" src="https://github.com/ericnem/chagall/assets/104458293/8fbc5889-0c2b-4c02-80a7-6d5badf5f8c0">
 
+<img width="1440" alt="image" src="https://github.com/ericnem/chagall/assets/104458293/0b8ecd0d-49c3-4df4-bce0-0b0d10f07ce4">
+
+
 
 ## Project setup
 
