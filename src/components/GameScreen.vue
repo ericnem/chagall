@@ -201,7 +201,7 @@ export default {
     // effects: mutates variables
     //          changes DOM
     function showAnswer() {
-      if (loadedImages[0] == false) {
+      if (loadedImages.value == false) {
         return;
       }
       showInfo.value = true;
@@ -266,6 +266,7 @@ export default {
   //          mutates variables 
   function restartGame() {
     playClickSound();
+    loadedImages.value = [false, false, false, false, false];
     roundNum.value = 1;
     currentScore.value = 0;
     highScore.value = getHighScore() || 0;
