@@ -33,7 +33,7 @@
 
     <footer>
       <br>
-      <p style="margin:50px" id="footer"> 
+      <p style="margin:10px" id="footer"> 
         made by <a href="https://github.com/tcohenkl" target="_blank"> <strong>tcohenkl</strong></a>
         <strong> and </strong><a href="https://github.com/ericnem" target="_blank"><strong>ericnem</strong></a>
       </p>
