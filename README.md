@@ -1,6 +1,7 @@
 # Chagall | Art Game
 
 Guess the year of over fifteen thousand artworks from the MET Museum's Database. Test your knowledge in 5 art periods spanning the ages. 
+Play the game now: https://chagall.netlify.app/
 
 ## Game Screen Shots
 
