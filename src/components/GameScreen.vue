@@ -59,8 +59,7 @@
             </div>
             <div class="guessingbox" style="border-color:gold;float:right; width:40%; height:100%; margin-top:0%;">
               <p class="boxtitle"> ANSWER</p>
-              <p style="background-color:#F5F5F5; font-size:20px; 
-              margin:5px 15% 0px 15%; width: 70%;
+              <p style="background-color:#F5F5F5; font-size:20px; margin:5px 15% 0px 15%; width: 70%;
               padding:7px 0px 7px 0px">{{ makeLabel(state.dates[roundNum-1]) }}</p>
             </div>
           </div>
@@ -77,7 +76,7 @@
           <br>   
           <button id="next" @click="nextRound"  v-if="roundNum < 5">Next</button>
           <button id="restart" @click="restartGame" v-if="roundNum >= 5">Play Again</button>
-          <button id="back" @click="$router.push('/')" v-if="roundNum >= 5">Menu</button>        
+          <button id="back" @click="goBack" v-if="roundNum >= 5">Menu</button>        
         </div>
       </div>
       </div>
@@ -86,10 +85,12 @@
 
 <!-- JS -->
 <script>
+import clickSound from '@/assets/click.mp3';
 import { fetchPaintings } from '../fetch.js';
 import { reactive, ref, onMounted, nextTick} from 'vue';
 import { pointDeduction } from '../score.js';
 import anime from 'animejs/lib/anime.es.js';
+import router from '@/router';
 
 export default {
   name: 'GameScreen',
@@ -110,6 +111,8 @@ export default {
     const guessabs = ref(Math.abs(guess.value));
     const showInfo = ref(false);
     const currentRoundPoints = ref(0);
+    let clickAudio = new Audio(clickSound);
+
     
     let tempScore = 0;
 
@@ -118,6 +121,18 @@ export default {
     onMounted(() => {
       highScore.value = getHighScore() || 0; 
     });
+
+    function playClickSound() {
+      clickAudio.volume = 0.1;
+      clickAudio.currentTime = 1.01; // start at the first second
+      clickAudio.play();
+    }
+
+    function goBack() {
+      playClickSound();
+      router.push('/')
+    }
+
 
     //makeLabel(year) appends A.D if the year is greater than zero, and 'B.C' otherwise.
     function makeLabel(year) {
@@ -158,6 +173,7 @@ export default {
 
     function showAnswer() {
       showInfo.value = true;
+      playClickSound();
 
       tempScore = currentScore.value;
       const answer = state.dates[roundNum.value - 1];
@@ -190,7 +206,7 @@ export default {
       } else {
         roundNum.value++; 
       }
-  
+      playClickSound();
       showInfo.value = false;
    }
 
@@ -212,6 +228,7 @@ export default {
 
 
   function restartGame() {
+    playClickSound();
     roundNum.value = 1;
     currentScore.value = 0;
     highScore.value = getHighScore() || 0;
@@ -263,6 +280,8 @@ export default {
       showAnswer,
       currentRoundPoints,
       restartGame,
+      playClickSound,
+      goBack, 
     }
   }
 }

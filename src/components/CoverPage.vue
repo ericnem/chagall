@@ -28,7 +28,7 @@
         <button id="rightbutton" @click="changeMode(1)"><i class="arrow right"></i></button>
       </div>
 
-      <button id="startbutton"  @click="$router.push({name: 'game'})">Start Game</button>
+      <button id="startbutton"  @click="toGameScreen">Start Game</button>
     </body>
 
     <footer>
@@ -48,12 +48,27 @@
 <script>
 import { ref, reactive, onMounted } from 'vue';
 import Mode from '../mode.js'
+import clickSound from '@/assets/click.mp3';
+import router from '@/router';
+
 
 export default {
   name: 'CoverPage',
   setup() {
     const audioRef = ref(null); //initially points to nothing
     const isMuted = ref(true);
+    let clickAudio = new Audio(clickSound);
+
+    function playClickSound() {
+      clickAudio.volume = 0.1;
+      clickAudio.currentTime = 1.01; // start at the first second
+      clickAudio.play();
+    }
+
+    function toGameScreen(){
+      playClickSound(); 
+      router.push({name: 'game'});
+    }
 
     // makeModes() returns a list of Mode objects
     function makeModes() {
@@ -118,7 +133,9 @@ export default {
       changeMode,
       isMuted,
       toggleMute,
-      restartAudio  
+      restartAudio,
+      playClickSound,
+      toGameScreen,
     };
   },
 };
