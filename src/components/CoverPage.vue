@@ -55,16 +55,24 @@ import router from '@/router';
 export default {
   name: 'CoverPage',
   setup() {
+
+    // STATE //
     const audioRef = ref(null); //initially points to nothing
     const isMuted = ref(true);
+
     let clickAudio = new Audio(clickSound);
 
+    // playClickSound plays the sound in clickAudio
+    // effects: produces audio output
     function playClickSound() {
       clickAudio.volume = 0.1;
       clickAudio.currentTime = 1.01; // start at the first second
       clickAudio.play();
     }
 
+    // toGameScreen switches to the next screen
+    // effects: produces audio output
+    //          changes router view
     function toGameScreen(){
       playClickSound(); 
       router.push({name: 'game'});
@@ -82,9 +90,11 @@ export default {
       return [all, ancient, medieval, renaissance, emodern, lmodern];
     }
 
+    // MORE STATE //
     const modes = reactive(makeModes())
     const currentMode = ref(0);
 
+    // Sets mode to the first one whenever the cover page is opened
     localStorage.setItem('mode', JSON.stringify(modes[0]));
 
     // changeMode(direction) cycles through modes depending on direction

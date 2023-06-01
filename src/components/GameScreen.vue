@@ -1,4 +1,4 @@
-<!-- HTML -->
+<!-- HTML --> 
 <template>
   <div class="bigscreen">
     <div class = "header">
@@ -48,7 +48,8 @@
           <br>
           <br>
         <button id="confirms" @click="showAnswer" v-if="!showInfo">Confirm</button>
-      <!-- Interlude Screen  -->
+      
+        <!-- Interlude Screen  -->
         <div class="interlude" v-if="showInfo">
           <div class="finalboxes" style="margin-bottom:5%;">
             <div class="guessingbox" style="float:left; width:40%; height:100%;margin-top:0%;">
@@ -99,9 +100,12 @@ export default {
   },
 
   setup() {
+
+    // STATE VARIABLES //
+
     const mode = JSON.parse(localStorage.getItem('mode'));
     const loadedImages = reactive([false, false, false, false, false]);
-    const roundNum = ref(1);
+    const roundNum = ref(1); 
     const currentScore = ref(0);
     const highScore = ref(0);
     const age = ref(1);
@@ -111,30 +115,40 @@ export default {
     const guessabs = ref(Math.abs(guess.value));
     const showInfo = ref(false);
     const currentRoundPoints = ref(0);
-    let clickAudio = new Audio(clickSound);
-
-    
-    let tempScore = 0;
-
     const state = reactive({images:[], titles:[], artists:[], dates:[]});
 
+    // ---------- //
+
+    let clickAudio = new Audio(clickSound);
+    let tempScore = 0;
+
+    // METHODS //
+    
+    // onMounted updates highScore when the component is mounted
+    // effects: mutates state
     onMounted(() => {
       highScore.value = getHighScore() || 0; 
     });
 
+    // playClickSound plays the click sound
+    // effects: produces audio output
     function playClickSound() {
       clickAudio.volume = 0.1;
       clickAudio.currentTime = 1.01; // start at the first second
       clickAudio.play();
     }
 
+    // goBack handles the return to menu button
+    // effects: produces audio output
+    //          changes view router
     function goBack() {
       playClickSound();
       router.push('/')
     }
 
 
-    //makeLabel(year) appends A.D if the year is greater than zero, and 'B.C' otherwise.
+    // makeLabel(year) takes a year as a number and returns a string version
+    //    based on the sign value, i.e. -500 => "500 B.C."
     function makeLabel(year) {
       let label = (Math.abs(year)).toString();
       if (year < 0) {
@@ -145,6 +159,9 @@ export default {
       return label
     }
 
+    // updateAge changes the age state between -1 and 1 based on the user's guess,
+    //    where -1 represents B.C. and 1 A.D.
+    // effects: mutates state
     function updateAge() {
       guessabs.value = Math.abs(guess.value);
       if (guess.value < 0) {
@@ -155,15 +172,23 @@ export default {
         guess.value = 1;
       }
     }
-        
+    
+    // getHighScore() retrieves the highscore from local storage
+    // effects: uses local storage
     function getHighScore(){
       return parseInt(localStorage.getItem('highScore'), 10);
     }
 
+    // setHighScore() stores the highscore in local storage
+    // effects: uses local storage
     function setHighScore(){
        localStorage.setItem('highScore', highScore.value);
     }
 
+    // endOfGame() changes the highscore if the currentscore is greater
+    //             than the current high Score
+    // effects: uses local storage  
+    //          mutates variables 
     function endOfGame(){
       if(currentScore.value > highScore.value){
         highScore.value = currentScore.value; 
@@ -171,6 +196,10 @@ export default {
       }
     } 
 
+    // showAnswer updates the components to show the answer and other relevant info
+    //    once the user makes their guess
+    // effects: mutates variables
+    //          changes DOM
     function showAnswer() {
       if (loadedImages[0] == false) {
         return;
@@ -201,7 +230,9 @@ export default {
     
   }
 
-
+    // nextRound() adds to the round number and calls the next round
+    // effects: changes DOM
+    //          mutates variables
     function nextRound() {
       
       if (roundNum.value < 5) {
@@ -213,7 +244,7 @@ export default {
       showInfo.value = false;
    }
 
-
+    // see fetch.js for documentation
     fetchPaintings(startEra.value, endEra.value).then(data => {
     for (let i = 0; i < 5; i++) {
       state.images.push(data[i].image);
@@ -230,6 +261,9 @@ export default {
   .catch(err => console.log(err));
 
 
+  // restartGame() reinitializes all variables and starts a new game
+  // effects: changes DOM 
+  //          mutates variables 
   function restartGame() {
     playClickSound();
     roundNum.value = 1;
@@ -486,13 +520,14 @@ margin-bottom:8px;
 font-size:25px;
 }
 
-
+/* All OF GUESSING BOX*/
 .container{
 align-items:center;
 }
 
-
-#guess{
+ 
+/* Guessing Box*/
+#guess {
 text-align:center;
 background-color:#F5F5F5;
 border-color:transparent;
@@ -505,8 +540,8 @@ font-size:20px;
  margin: 0;
 }
 
-
-#age{
+/* Guessing Box; Where users change the Age from A.D to B.C */
+#age{ 
 padding-top:8px;
 height:100%;
 font-size:20px;
@@ -522,7 +557,7 @@ padding-bottom:8px;
    display: none;
 }
 
-
+/* Guessing Box; Where users input their Guess */
 .guessingbox {
 font-family: Helvertica,sans-serif;
 margin-left:auto;
@@ -534,6 +569,7 @@ border: 4px solid black;
 border-radius:30px;
 }
 
+/* Fade in Animation for Final Boxes */
 @keyframes fadeIn {
   0% { opacity: 0; }
   100% { opacity: 1; }
@@ -544,7 +580,7 @@ border-radius:30px;
   100% { opacity: 1; }
 }
 
-
+/* Confirm Button */
 #confirms {
 color: black;
 background-color: gold;
@@ -557,7 +593,7 @@ border-radius: 8px;
 margin-top: 5%;
 }
 
-
+/* Confirm Button */
 #confirms:hover{
 background-color: #b99225;
 border: #b99225;
