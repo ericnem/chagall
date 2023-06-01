@@ -1,6 +1,6 @@
 # Chagall | Art Game
 
-Guess the year of thousands of artworks from the MET Museum's Database. Test your knowledge in 5 art periods spanning the ages. 
+Guess the year of over fifteen thousand artworks from the MET Museum's Database. Test your knowledge in 5 art periods spanning the ages. 
 
 ## Game Screen Shots
 
