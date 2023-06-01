@@ -201,7 +201,7 @@ export default {
     // effects: mutates variables
     //          changes DOM
     function showAnswer() {
-      console.log(loadedImages[0])
+      
       if (loadedImages[0] == false) {
         return;
       }
