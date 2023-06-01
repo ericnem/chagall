@@ -172,6 +172,9 @@ export default {
     } 
 
     function showAnswer() {
+      if (loadedImages[0] == false) {
+        return;
+      }
       showInfo.value = true;
       playClickSound();
 
@@ -200,7 +203,7 @@ export default {
 
 
     function nextRound() {
-
+      
       if (roundNum.value < 5) {
         roundNum.value++;
       } else {
